@@ -1,16 +1,16 @@
 ##############################################################
-# Cuesti√≥n 1
+# CuestiÛn 1
 ##############################################################
 
-# N√∫mero de muestras
+# N˙mero de muestras
 num_samples = c(10, 100, 10000)
 
-# Par√°metros de la distribuci√≥n normal
+# Par·metros de la distribuciÛn normal
 mu = 3
 sigma = 6
 
 
-# Guardamos las muestras de cada distrubuci√≥n generada 
+# Guardamos las muestras de cada distrubuciÛn generada 
 samples_10 = rnorm(num_samples[1], mu, sigma)
 samples_100 = rnorm(num_samples[2], mu, sigma)
 samples_10000 = rnorm(num_samples[3], mu, sigma)
@@ -21,20 +21,20 @@ hist(samples_10)
 hist(samples_100)
 hist(samples_10000)
 
-# Calculamos los estad√≠sticos m√°s relevantes
+# Calculamos los estadÌsticos m·s relevantes
 
-# M√≠nimo y m√°ximo, primer y tercer cuartil, media y mediana
+# MÌnimo y m·ximo, primer y tercer cuartil, media y mediana
 summary(samples_10)
 summary(samples_100)
 summary(samples_10000)
 
-# Calculamos la desviaci√≥n t√≠pica
+# Calculamos la desviaciÛn tÌpica
 sd(samples_10)
 sd(samples_100)
 sd(samples_10000)
 
 # Calculamos la moda
-# Extra√≠do de 
+# ExtraÌdo de 
 # http://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode
 mode <- function(x) {
   ux <- unique(x)
@@ -45,9 +45,9 @@ mode(samples_10)
 mode(samples_100)
 mode(samples_10000)
 
-# Kurtosis y asimetr√≠a (es necesario el paquete `moments`)
+# Kurtosis y asimetrÌa (es necesario el paquete `moments`)
 
-# Si no est√° disponible lo instalamos
+# Si no est· disponible lo instalamos
 if(!require("moments")) { install.packages("moments") }
 
 # Cargamos el paquete 
@@ -58,16 +58,16 @@ kurtosis(samples_10)
 kurtosis(samples_100)
 kurtosis(samples_10000)
 
-# Calculamos la asimetr√≠a
+# Calculamos la asimetrÌa
 skewness(samples_10)
 skewness(samples_100)
 skewness(samples_10000)
 
 ##############################################################
-# Cuesti√≥n 2
+# CuestiÛn 2
 ##############################################################
 
-# Usamos el m√©todo de suma de 12 uniformes para generar 
+# Usamos el mÈtodo de suma de 12 uniformes para generar 
 # 10000 muestras de una normal (0,1)
 x = array()
 n = 10000
@@ -76,8 +76,8 @@ for(i in 1:n){
   x[i] = sum(unif_samples) - 6
 }
 
-# Desplazamos la distribuci√≥n generada para que tenga media 3
-# y desviaci√≥n t√≠pica 6
+# Desplazamos la distribuciÛn generada para que tenga media 3
+# y desviaciÛn tÌpica 6
 x = sigma*x + mu
 
 mean(x)
@@ -85,15 +85,15 @@ sd(x)
 kurtosis(x)
 skewness(x)
 
-# Generamos 10000 muestras de con la funci√≥n `rnorm`  
+# Generamos 10000 muestras de con la funciÛn `rnorm`  
 x1 = rnorm(n, mu, sigma)
 
 ##############################################################
 # Cuesti√≥n 3
 ##############################################################
 
-# Generamos 10000 muestras de una distribuci√≥n exponencial
-# de par√°metro lambda = 9
+# Generamos 10000 muestras de una distribuciÛn exponencial
+# de par·metro lambda = 9
 
 lambda = 9
 
@@ -106,17 +106,17 @@ for(i in 1:n){
 # Dibujamos el histograma de la muestra generada
 hist(exp_samples)
 
-# Calculamos el coeficiente de variaci√≥n
+# Calculamos el coeficiente de variaciÛn
 cv = sd(exp_samples)/mean(exp_samples)
 
 
 ##############################################################
-# Cuesti√≥n 4
+# CuestiÛn 4
 ##############################################################
 
-# Usando rnorm generamos una distribuci√≥n normal bivariante
+# Usando rnorm generamos una distribuciÛn normal bivariante
 
-# Par√°metros de la funci√≥n bivariante
+# Par·metros de la funciÛn bivariante
 Mu = c(3, 2)
 
 Sigma = matrix(c(7, 4, 4, 5), ncol = 2, nrow = 2)
@@ -125,7 +125,7 @@ Sigma = matrix(c(7, 4, 4, 5), ncol = 2, nrow = 2)
 # y covarianzas
 L = t(chol(Sigma))
 
-# Generamos 10000 muestras de la distribuci√≥n
+# Generamos 10000 muestras de la distribuciÛn
 multi_dist = matrix(nrow = 2, ncol = n)
 for(i in 1:n){
   Z = rnorm(length(Mu))
@@ -137,7 +137,7 @@ for(i in 1:n){
 # Calculamos las medias
 apply(multi_dist, 1, mean)
 
-# Calculamos las varianzas y desviaciones t√≠picas
+# Calculamos las varianzas y desviaciones tÌpicas
 apply(multi_dist, 1, var)
 apply(multi_dist, 1, sd)
 
@@ -150,10 +150,12 @@ cov(x,y)
 
 # Representamos el scatterplot
 
-# Si no est√° el paquete `scatterplot3d`, lo instalamos
+# Si no est· el paquete `scatterplot3d`, lo instalamos
 if(!require("scatterplot3d")) { install.packages("scatterplot3d") }
 
 # Cargamos el paquete `scatterplot3d`
 require("scatterplot3d")
 
+plot(x,y)
 
+scatterplot3d(x, y, dmvnorm(t(multi_dist), mean = Mu, sigma = Sigma))
