@@ -82,20 +82,43 @@ for(i in 1:n){
 # y desviación típica 6
 x = sigma*x + mu
 
+# Calculamos algunos descriptivos estadísticos
+summary(x)
 mean(x)
+var(x)
 sd(x)
 kurtosis(x)
 skewness(x)
+mlv(x, method = "mfv")
+
 
 # Generamos 10000 muestras de con la función `rnorm`  
 x1 = rnorm(n, mu, sigma)
+
+# Calculamos algunos descriptivos estadísticos
+summary(x1)
+mean(x1)
+var(x1)
+sd(x1)
+kurtosis(x1)
+skewness(x1)
+mlv(x1, method = "mfv")
+
+# Comparamos los 3 histogramas
+par(mfrow = c(1,3))
+hist(samples_10000, main = "10000 muestras\n Cuestión 1", xlab = "", "ylab" = "Frecuencia", col = "blue")
+hist(x, main = "12 uniformes", xlab = "", "ylab" = "Frecuencia", col = "blue")
+hist(x1, main = "10000 muestras", xlab = "", "ylab" = "Frecuencia", col = "blue")
+
+# Restauramos la vista de los plots
+par(mfrow=c(1,1))
 
 ##############################################################
 # Cuestión 3
 ##############################################################
 
-# Generamos 10000 muestras de una distribuci?n exponencial
-# de par?metro lambda = 9
+# Generamos 10000 muestras de una distribución exponencial
+# de parámetro lambda = 9
 
 lambda = 9
 
@@ -106,19 +129,21 @@ for(i in 1:n){
 }
 
 # Dibujamos el histograma de la muestra generada
-hist(exp_samples)
+hist(exp_samples, main="10000 muestras de una distribución exponencial", xlab="", ylab = "Frecuencia", col = "blue")
 
-# Calculamos el coeficiente de variaci?n
-cv = sd(exp_samples)/mean(exp_samples)
+# Calculamos el coeficiente de variación
+cv = sd(exp_samples)/abs(mean(exp_samples))
 
+# Calculamos la media
+mean(exp_samples)
 
 ##############################################################
-# Cuesti?n 4
+# Cuestión 4
 ##############################################################
 
-# Usando rnorm generamos una distribuci?n normal bivariante
+# Usando rnorm generamos una distribución normal bivariante
 
-# Par?metros de la funci?n bivariante
+# Parámetros de la función bivariante
 Mu = c(3, 2)
 
 Sigma = matrix(c(7, 4, 4, 5), ncol = 2, nrow = 2)
@@ -127,7 +152,7 @@ Sigma = matrix(c(7, 4, 4, 5), ncol = 2, nrow = 2)
 # y covarianzas
 L = t(chol(Sigma))
 
-# Generamos 10000 muestras de la distribuci?n
+# Generamos 10000 muestras de la distribución
 multi_dist = matrix(nrow = 2, ncol = n)
 for(i in 1:n){
   Z = rnorm(length(Mu))
@@ -139,9 +164,8 @@ for(i in 1:n){
 # Calculamos las medias
 apply(multi_dist, 1, mean)
 
-# Calculamos las varianzas y desviaciones t?picas
+# Calculamos las varianzas
 apply(multi_dist, 1, var)
-apply(multi_dist, 1, sd)
 
 # Calculamos las covarianzas
 x = multi_dist[1,]
@@ -152,12 +176,45 @@ cov(x,y)
 
 # Representamos el scatterplot
 
-# Si no est? el paquete `scatterplot3d`, lo instalamos
+# Si no está el paquete `scatterplot3d`, lo instalamos
 if(!require("scatterplot3d")) { install.packages("scatterplot3d") }
+
+# Si no está el paquete `mvtnorm`, lo instalamos
+if(!require("mvtnorm")) { install.packages("mvtnorm") }
 
 # Cargamos el paquete `scatterplot3d`
 require("scatterplot3d")
 
-plot(x,y)
+# Cargamos el paquete `mvtnorm`
+require("mvtnorm")
 
+# Función de densidad de una distribución normal mutivariante
+cdf = function(x){
+  const = 1/(2*pi*det(Sigma)^(1/2))
+  return (const*exp(-1/2*t(x-Mu)%*%solve(Sigma)%*%(x-Mu)))
+}
+
+z = apply(t(multi_dist), 1, cdf)
+
+# Colores para el degradado
+colors = heat.colors(101)
+zcolor = colors[(z - min(z))/diff(range(z))*100 + 1]
+
+# Función de densidad usando la función `cdf` definida anteriormente
+scatterplot3d(x, y, z, color = zcolor,
+    angle = 55, scale.y = 0.7, pch = 16, 
+    main = "10000 muestras de una distribución normal bivariante",
+    zlab = "Densidad")
+
+# Función de densidad usando la función `dmvnorm`
+scatterplot3d(x, y, dmvnorm(t(multi_dist), mean = Mu, sigma = Sigma),
+    color = zcolor,
+    angle = 55, scale.y = 0.7, pch = 16, 
+    main = "10000 muestras de una distribución normal bivariante",
+    zlab = "Densidad")
+
+# Scatterlot
+plot(x,y, main = "10000 muestras de una distribución normal bivariante")
+
+# Función de densidad
 scatterplot3d(x, y, dmvnorm(t(multi_dist), mean = Mu, sigma = Sigma))
