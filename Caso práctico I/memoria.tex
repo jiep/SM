@@ -29,7 +29,7 @@
 \usepackage{url}
 \usepackage{tikz}
 \usepackage{pdflscape}
-%\usepackage{minted}
+\usepackage{minted}
 
 %\setsansfont[Ligatures=TeX]{texgyreadventor}
 %\setmainfont[Ligatures=TeX]{texgyrepagella}
@@ -81,7 +81,7 @@ y la semilla es el conjunto de los últimos $100$ números. El período es de ap
 
 El código que implementa esta función es el siguiente:
 
-\begin{verbatim}
+\begin{minted}{r}
 function (kind = NULL, normal.kind = NULL) 
 {
     kinds <- c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", 
@@ -121,7 +121,7 @@ function (kind = NULL, normal.kind = NULL)
     else r
 }
 
-\end{verbatim}
+\end{minted}
 
 Esta función toma dos argumentos: el primero es el algoritmo para generar números aleatorios y el segundo es el algoritmo para generar números aleatorios siguiendo una distribución normal de media $0$ y desviación típica $1$.\\
 
@@ -150,49 +150,49 @@ En el caso de Java, se utilizan los siguientes parámetros:
 
 \[\begin{array}{c}
 a = 25214903917\\
-c = 11
+c = 11\\
 m = 2^{48}
 \end{array}\]
 
-Notar que el número $25214903917$ se corresponde con $5DEECE66D_{16}$ en base hexadecimal. Este número escrito en base $16$ lo encontraremos posteriormente escrito en el código.\\
+Notar que el número $25214903917$ se corresponde con 5DEECE66D$_{16}$ en base hexadecimal. Este número escrito en base $16$ lo encontraremos posteriormente escrito en el código.\\
 
 La clase Random permite generar números aleatorios uniforme distribuidos en el intervalo $[0,n]$, y en particular en el intervalo $[0,1]$ o generar números aleatorios generados por una distribución normal $\mathcal{N}(0,1)$.\\
 
 La función encargada de establecer la semilla con la que se iniciará el generador congruencial. Esta función tiene el nombre \texttt{setSeed} y recibe un parámetro \texttt{seed}, que establece la semilla a
 
-\begin{verbatim}
+\begin{minted}{java}
 public synchronized void setSeed(long seed)
 {
 	this.seed = (seed ^ 0x5DEECE66DL) & ((1L << 48) - 1);
 	haveNextNextGaussian = false;
 }
-\end{verbatim}
+\end{minted}
 
 Notar que, de acuerdo a este código, si se establece la misma semilla, se generarán los mismos números aleatorios.\\
 
 La función \texttt{next} es la encargada de generar números aleatorios en el intervalo $[0,1]$. El código de esta función es el siguiente:
 
-\begin{verbatim}
+\begin{minted}{java}
 protected synchronized int next(int bits)
 {
 	seed = (seed * 0x5DEECE66DL + 0xBL) & ((1L << 48) - 1);
 	return (int) (seed >>> (48 - bits));
 }
-\end{verbatim}
+\end{minted}
 
 Esta función genera números aleatorios usando la fórmula del generador congruencial lineal:
 
 \[ X_{n+1} = (252149039 \cdot X_n + 11) \mod 2^{48} \]
 
-Notar que se han traducido los valores decimales a hexadecimal para operar con ellos con operadores bit a bit ($\&,\sim, \ll \gg, \lll, \ggg,$, etc.) para trabajar más eficientemente.\\
+Notar que se han traducido los valores decimales a hexadecimal para operar con ellos con operadores bit a bit ($\&,\sim, \ll \gg, \lll, \ggg$, etc.) para trabajar más eficientemente.\\
 
-La primera línea del código hace el módulo $2^{48}$ de $(252149039 \cdot X_n + 11)$ usando operaciones bit a bit. Notar que $n \& (1 << 48) - 1$ es equivalente a hacer $n \mod 2^{48}$, si $n$ es un número binario.\\
+La primera línea del código hace el módulo $2^{48}$ de $(252149039 \cdot X_n + 11)$ usando operaciones bit a bit. Notar que $n \ \& \ (1 \ll 48) - 1$ es equivalente a hacer $n \mod 2^{48}$, si $n$ es un número binario.\\
 
 La segunda línea convierte el número en entero, que lo devuelve.\\
 
 Por otro lado, para generar números aleatorios normalmente distribuidos, se utiliza la función \texttt{nextGaussian}, que genera un número con distribución $\mathcal{N}(0,1)$. El código de esta función es:
 
-\begin{verbatim}
+\begin{minted}{java}
 public double nextGaussian() {
    if (haveNextNextGaussian) {
      haveNextNextGaussian = false;
@@ -210,13 +210,13 @@ public double nextGaussian() {
      return v1 * multiplier;
    }
  }
-\end{verbatim}
+\end{minted}
 
 Este código se basa en el método polar de Marsaglia\footnote{\url{https://en.wikipedia.org/wiki/Marsaglia_polar_method}}. Se generan dos números aleatorios usando la función \texttt{nextDouble}\footnote{La función \texttt{nextDouble} genera un número aleatorio en el intervalo $(0,1)$ usando la función \texttt{next}, ya explica anteriormente.}\footnote{La función \texttt{nextDouble} genera un número aleatorio en el intervalo $(0,1)$. Para generarlo en el intervalo $(-1,1)$ buscamos una función lineal $f: (0,1) \to (-1,1)$ de la forma $f(x) = ax + b$, con $a,b \in \mathbb{R}$. Imponiendo las condiciones $f(0)= -1$ y $f(1) = 1$, se tiene que la función buscada es $f(x) = 2x-1$, que es la usada en el código}. Se calcula la norma euclídea de los dos números aleatorios y se repite el proceso hasta que la norma es menor que $1$, es decir, si está dentro del círculo unidad. Por último, se devuelve el número con distribución normal dado por:
 
 \[ v1 \cdot \sqrt{\dfrac{-2 \ln s}{s}} \]
 
-donde $s$ es la norma euclídea de los dos números aleatorios generados, v1 y v2.\\
+donde $s$ es la norma euclídea de los dos números aleatorios generados, $v1$ y $v2$.\\
 
 El código de la clase Random se muestra en el Anexo~\ref{app:Random}.
 
@@ -230,7 +230,7 @@ En este caso práctico, hemos visto que cada lenguaje de programación tiene gen
 
 A continuación, se muestra el código completo de la clase Random de Java.
 
-\begin{verbatim}
+\begin{minted}{java}
 /*
  * Copyright (c) 1995, 2013, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1458,6 +1458,6 @@ class Random implements java.io.Serializable {
         unsafe.putObjectVolatile(this, seedOffset, new AtomicLong(seedVal));
     }
 }
-\end{verbatim}
+\end{minted}
 
 \end{document}
