@@ -31,8 +31,8 @@
 \usepackage{pdflscape}
 \usepackage{minted}
 
-\setsansfont[Ligatures=TeX]{texgyreadventor}
-\setmainfont[Ligatures=TeX]{texgyrepagella}
+%\setsansfont[Ligatures=TeX]{texgyreadventor}
+%\setmainfont[Ligatures=TeX]{texgyrepagella}
 
 \input{portada}
 
@@ -50,6 +50,10 @@
 \portada{Caso práctico II}{Simulación y Metaheurísticas}{Generación de variables aleatorias}{José Ignacio Escribano}{Móstoles}
 
 \listoftables
+\thispagestyle{empty}
+\newpage
+
+\listoffigures
 \thispagestyle{empty}
 \newpage
 
@@ -113,7 +117,7 @@ Simulamos 10000 observaciones de una distribución normal $\mathcal{N}(\mu = 3, 
 
 \[ X = \mu + \sigma Y \]
 
-donde $X \sim \mathcal{N}(\mu, signa^2)$ y $Y \sim \mathcal{N}(0,1)$.\\
+donde $X \sim \mathcal{N}(\mu, \sigma^2)$ y $Y \sim \mathcal{N}(0,1)$.\\
 
 Además, lo comparamos con 10000 observaciones del generador normal de R y con los resultados de la Cuestión~\ref{cuestion:1}. Los resultados de todos ellos se puede ver en la Tabla~\ref{tbl:comp2} y la Figura~\ref{fig:compPlots} muestra una comparación entre los histogramas.\\
 
@@ -145,7 +149,7 @@ Se puede observar que todos los métodos obtienen estadísticos descriptivos muy
 
 \subsection{Cuestión 3}
 
-Usaremos el método de inversión para obtener 10000 muestras de una distribución $\mathcal{Exp}(\lambda = 9)$. El histograma de las muestras generadas se muestra en la Figura~\ref{fig:distExp}.\\
+Usaremos el método de inversión para obtener 10000 muestras de una distribución $\mathcal{E}xp(\lambda = 9)$. El histograma de las muestras generadas se muestra en la Figura~\ref{fig:distExp}.\\
 
 \begin{figure}[htbp!]
 \centering
@@ -183,7 +187,7 @@ En primer lugar, calculamos la matriz de Cholesky de $\Sigma$, obteniéndose,
 1.511858 & 1.647509
 \end{array} \right) \]
 
-Se puede comprobar que, efectivamente, $\Sigma = L \cdot L^t$.\\
+Se puede comprobar que, efectivamente, $\Sigma = L \cdot L^T$.\\
 
 La muestra generada tiene las siguientes medias:
 
@@ -203,16 +207,16 @@ En la Figura~\ref{fig:bivariante} se muestra un scatterplot de las 10000 muestra
 
 \begin{figure}[tbph!]
 \centering
-\includegraphics[width=0.8\linewidth]{magenes/bivariante.png}
+\includegraphics[width=0.8\linewidth]{imagenes/bivariante.png}
 \caption{10000 muestras de una distribución normal bivariante}
 \label{fig:bivariante}
 \end{figure}
 
-Recordemos que la función de una distribución de una distribución normal bivariante viene dada por
+Recordemos que la función de densidad de una distribución normal multivariante viene dada por
 
-\[ f(x,y) = \dfrac{1}{2\pi |\Sigma|^{1/2}} \exp \left( -\dfrac{1}{2} (\mathbf{x} - \mathbf{\mu})^T \Sigma^{-1} (\mathbf{x} - \mathbf{\mu}) \right) \] 
+\[ f(\mathbf{x} = (x_1,\dots, x_n) | \mathbf{\mu}, \Sigma) = \dfrac{1}{2\pi |\Sigma|^{1/2}} \exp \left( -\dfrac{1}{2} (\mathbf{x} - \mathbf{\mu})^T \Sigma^{-1} (\mathbf{x} - \mathbf{\mu}) \right) \] 
 
-La Figura~\ref muestra la función de densidad de la distribución generada.
+La Figura~\ref{fig:bivarianteDen} muestra la función de densidad de la distribución generada.
 
 \begin{figure}[tbph!]
 \centering
@@ -233,9 +237,7 @@ Además, gracias a la gran cantidad de funciones disponibles y la gran capacidad
 
 A continuación se muestra el código utilizado para la realización de este caso práctico.
 
-\begin{verbatim}
-
-\end{verbatim}
+\inputminted{r}{../codigo/caso_ii.R}
 
 
 \end{document}

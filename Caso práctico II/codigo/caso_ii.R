@@ -17,9 +17,15 @@ samples_10000 = rnorm(num_samples[3], mu, sigma)
 
 # Construimos los histogramas
 par(mfrow = c(1,3))
-hist(samples_10, main = "10 muestras", xlab = "", "ylab" = "Frecuencia", col = "blue")
-hist(samples_100, main = "100 muestras", xlab = "", "ylab" = "Frecuencia", col = "blue")
-hist(samples_10000, main = "10000 muestras", xlab = "", "ylab" = "Frecuencia", col = "blue")
+hist(samples_10, main = "10 muestras", 
+                 xlab = "", ylab = "Frecuencia", 
+				 col = "blue")
+hist(samples_100, main = "100 muestras", 
+                  xlab = "", ylab = "Frecuencia", 
+				  col = "blue")
+hist(samples_10000, main = "10000 muestras", 
+                    xlab = "", ylab = "Frecuencia", 
+					col = "blue")
 
 # Restauramos la vista de los plots
 par(mfrow=c(1,1))
@@ -106,9 +112,12 @@ mlv(x1, method = "mfv")
 
 # Comparamos los 3 histogramas
 par(mfrow = c(1,3))
-hist(samples_10000, main = "10000 muestras\n Cuestión 1", xlab = "", "ylab" = "Frecuencia", col = "blue")
-hist(x, main = "12 uniformes", xlab = "", "ylab" = "Frecuencia", col = "blue")
-hist(x1, main = "10000 muestras", xlab = "", "ylab" = "Frecuencia", col = "blue")
+hist(samples_10000, main = "10000 muestras\n Cuestión 1", 
+                    xlab = "", ylab = "Frecuencia", col = "blue")
+hist(x, main = "12 uniformes", 
+        xlab = "", ylab = "Frecuencia", col = "blue")
+hist(x1, main = "10000 muestras", 
+         xlab = "", ylab = "Frecuencia", col = "blue")
 
 # Restauramos la vista de los plots
 par(mfrow=c(1,1))
@@ -129,7 +138,8 @@ for(i in 1:n){
 }
 
 # Dibujamos el histograma de la muestra generada
-hist(exp_samples, main="10000 muestras de una distribución exponencial", xlab="", ylab = "Frecuencia", col = "blue")
+hist(exp_samples, main="10000 muestras de una distribución exponencial", 
+                  xlab="", ylab = "Frecuencia", col = "blue")
 
 # Calculamos el coeficiente de variación
 cv = sd(exp_samples)/abs(mean(exp_samples))
@@ -194,9 +204,11 @@ cdf = function(x){
   return (const*exp(-1/2*t(x-Mu)%*%solve(Sigma)%*%(x-Mu)))
 }
 
+# Aplicamos la función de densidad con 
+# cada punto muestreado
 z = apply(t(multi_dist), 1, cdf)
 
-# Colores para el degradado
+# Colores para el degradado de la función de densidad
 colors = heat.colors(101)
 zcolor = colors[(z - min(z))/diff(range(z))*100 + 1]
 
@@ -215,6 +227,3 @@ scatterplot3d(x, y, dmvnorm(t(multi_dist), mean = Mu, sigma = Sigma),
 
 # Scatterlot
 plot(x,y, main = "10000 muestras de una distribución normal bivariante")
-
-# Función de densidad
-scatterplot3d(x, y, dmvnorm(t(multi_dist), mean = Mu, sigma = Sigma))
