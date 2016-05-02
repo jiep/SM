@@ -16,22 +16,26 @@ states = c("estado0", "estado1", "estado2")
 dimnames(P) <- list(states, states)
 
 
-
+# Definimos una función para muestrear una cadena de Markov
 samplingCMTD = function(P, N, i0){
   X = array()
   X[1] = i0
-  i = 1
-  while(i <= N){
+  i = 2
+  while(i < N){
     h = rgeom(1, 1-P[i0,i0])
+    cat("h:", h, "\n i:",i, "\n", "i+h:", i+h, "\n")
     X[i+h] = generateDist(P, i0, colnames(P))
+    cat("estado: ", X[i+h], "\n", "---------------\n")
     i0 = X[i+h]
     i = i + 1
   }
-  
+  #X = X[!is.na(X)]
   return(X)
 }
 
+# Definimos una función para generar la distribución discreta 
 generateDist = function(P, state, states){
+  
   # Eliminamos el estado en el que nos encontramos
   states = setdiff(states, state)
   
@@ -55,6 +59,8 @@ generateDist = function(P, state, states){
   # Calculamos la longitud real del vector (le hemos añadido una posición nueva)
   n = length(cumulative) - 1
   
+  # Buscamos la posición que acumula la cantidad de probabilidad
+  # generada por el número aleatorio y lo asignamos al estado.
   for(i in 1:n){
     if((cumulative[i] <= u) & (u <= cumulative[i+1])){
       stat = states[i]
@@ -70,3 +76,35 @@ generateDist = function(P, state, states){
 # Cuestión 2
 ##############################################################
 
+# Número de muestras de cada réplica
+N = 1000
+
+# Número de réplicas
+n = 100
+
+X = list()
+for(i in 1:n){
+  a = samplingCMTD(P, N, "estado0")
+  X[[i]] = summary(as.factor(na.omit(a)))/length(na.omit(a))
+}
+
+# Guardamos la media de las proporciones de cada estado
+state1 = array()
+state2 = array()
+state3 = array()
+
+for(i in 1:n){
+  state1[i] = X[[i]][[1]]
+  state2[i] = X[[i]][[2]]
+  state3[i] = X[[i]][[3]]
+}
+
+# Media y desviación típica de cada estado
+mean(state1)
+sd(state1)
+
+mean(state2)
+sd(state2)
+
+mean(state3)
+sd(state3)

@@ -27,9 +27,13 @@
 \usepackage{subfigure}
 \usepackage{footnote}
 \usepackage{url}
-\usepackage{tikz}
+
 \usepackage{pdflscape}
 \usepackage{minted}
+\usepackage{blkarray}
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
 
 %\setsansfont[Ligatures=TeX]{texgyreadventor}
 %\setmainfont[Ligatures=TeX]{texgyrepagella}
@@ -67,7 +71,7 @@
 
 \section{Introducción}
 
-
+Este caso práctico veremos cómo simular una cadena de Markov en tiempo discreto.
 
 \section{Resolución del caso práctico}
 
@@ -75,16 +79,97 @@ A continuación resolveremos cada una de las cuestiones planteadas.
 
 \subsection{Cuestión 1}
 
+Sabemos que la matriz de transición de la cadena de Markov tiene los siguientes valores:
+
+\[ P = \left( \begin{array}{ccc}
+0.1 & 0.4 & p_{13} \\
+0.1 & 0.7 & p_{23} \\
+0.3 & 0.1 & p_{33} \\
+\end{array} \right) \]
+
+donde $p_{13}, p_{23}$ y $p_{33}$ son valores desconocidos.\\
+
+Puesto que la matriz $P$ debe ser una matriz estocástica, esto es, la suma de sus filas debe ser $1$, aplicamos esta restricción a cada una de las filas, quedando un sistema como el que sigue:
+
+\[ \begin{array}{c}
+0.1 + 0.4 + p_{13} = 1 \iff p_{13} = 0.5 \\
+0.1 + 0.7 + p_{23} = 1 \iff p_{23} = 0.2 \\
+0.3 + 0.1 + p_{33} = 1 \iff p_{33} = 0.6
+\end{array} \]
+
+Así pues, la matriz de transición de la cadena de Markov con espacio de estados $S = \{ \text{estodo0, estado1, estado2} \}$ queda de la siguiente forma:
+
+\[ P = 
+\begin{blockarray}{cccc}
+&\text{estado0} & \text{estado1} & \text{estado2} \\
+\begin{block}{c(ccc)}
+\text{estado0} & 0.1 & 0.4 & 0.5 \\
+\text{estado1} & 0.1 & 0.7 & 0.2 \\
+\text{estado2} & 0.3 & 0.1 & 0.6 \\
+\end{block}
+\end{blockarray}
+\]
+
+La Figura~\ref{fig:grafo} muestra la matriz de transición en forma de grafo.\\
+
+\begin{figure}[tbph!]
+\label{fig:grafo}
+\begin{center}
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=6cm,
+	semithick]
+	
+	\node[state] (A)                    {estado0};
+	\node[state]         (B) [above right of=A] {estado1};
+	\node[state]         (C) [below right of=B] {estado2};
+	
+	\path (A) edge[bend left ]  node {0.4} (B);
+	\path (A) edge[ ]   node {0.5} (C);
+	\path (B) edge[bend left]   node {0.2} (C);
+	\path (B) edge[bend left]   node {0.1} (A);
+	\path (C) edge[bend left]   node {0.1} (B);
+	\path (C) edge[bend left]   node {0.3} (A);
+	\path (A) edge[loop below]  node {0.1} (A);
+	\path (C) edge[loop below]  node {0.6} (C);
+	\path (B) edge[loop above]  node {0.7} (B);
+	
+	\end{tikzpicture}
+\end{center}
+\caption{Cadena de Markov en forma de grafo}
+\end{figure}
+
 
 
 \subsection{Cuestión 2}
 
+Usamos el algoritmo visto en clase para generar transiciones de la cadena de Markov. El código implementado se puede ver en el Anexo~\ref{app:codigo}.\\
+
+Haciendo $100$ réplicas con $100$ muestras de la cadena de Markov cada una, se obtienen los resultados de la Tabla~\ref{tbl:comp}.\\
+
+\begin{table}[htbp!]
+	\centering
+	\caption{Media y desviacón típica de cada estado}
+	\label{tbl:comp}
+	\begin{tabular}{@{}ccc@{}}
+		\toprule
+		\textbf{Estado} & \textbf{Media} & \textbf{Desviación típica} \\ \midrule
+		estado0         & 0.2933         & 0.035                      \\
+		estado1         & 0.3068         & 0.042                      \\
+		estado2         & 0.3998         & 0.041                      \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+Es decir, el computador estará en el 29.33\% del tiempo en el estado0, el 30.68\% en el estado1 y el 39.98\% en el estado2.\\
+
+
 
 \section{Conclusiones}
 
+En este caso práctico hemos visto cómo simular cadenas de Markov en tiempo discreto, una herramienta muy útil utilizada en diversas áreas.
+
 \newpage
 
-\section{Código R utilizado}
+\appendix
+\section{Código R utilizado}\label{app:codigo}
 
 A continuación se muestra el código utilizado para la realización de este caso práctico.
 
