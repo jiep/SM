@@ -34,19 +34,39 @@ generateCost =  function(){
 ##############################################################
 
 estimateSampleVariance =  function(alpha = 0.05, d = 10){
-  n0 = 30
-  i = 0
+  i = 1
+  n = array()
+  n[i] = 30
   
   # Guardamos las muestras del coste
   X = array()
-  for(j in 1:n0){
+  for(j in 1:n[1]){
     X[j] = generateCost()
   }
   
-  S = var(X)
+  S = array()
+  S[i] = var(X)
   
-  while (2*qnorm(alpha/2)*S/sqrt(n0) > d){
+  while (2*qnorm(1-alpha/2)*S/sqrt(n[i]) > d){
     i = i + 1
     
+    min_i = which(n >= (2*qnorm(1-alpha/2)*S[i-1]/d)^2)
+    print(n)
+    if(is.integer(min_i) && length(min_i) == 0){
+      min_i = (2*qnorm(1-alpha/2)*S[i-1]/d)^2
+      n[i] = min_i
+    }else{
+      n[i] = n[min_i]
+    }
+    
+    cat("n_i", n[i])
+    
+    for(j in (n[i-1] +1):n[i]){
+      X[j] = generateCost()
+    }
+    
+    S[i] = var(X)
   }
+  
+  return(n[i])
 }
