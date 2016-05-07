@@ -216,3 +216,4 @@ local.properties
 *.resources
 *.xmi
 *.snap
+*.xmi
