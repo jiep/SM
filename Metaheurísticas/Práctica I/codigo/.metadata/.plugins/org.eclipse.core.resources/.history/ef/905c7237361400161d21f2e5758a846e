@@ -1,0 +1,10 @@
+package es.urjc.phub;
+
+public class PHub {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

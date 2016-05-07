@@ -1,0 +1,49 @@
+package es.urjc.phub;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class PHub {
+	
+	
+	
+	static InstanciaPHub leerInstancia(String filepath) throws IOException{
+		BufferedReader br = new BufferedReader (new FileReader (filepath));
+		 
+        // Leemos la primera línea del fichero
+        String linea1 = br.readLine();
+        System.out.println(linea1);
+        String datos[] = linea1.split(" ");
+        
+        /*
+         *  Comenzamos a leer los datos desde el elemento 1, puesto que
+         *  cada línea comienza con un espacio
+         */
+        int nodos = Integer.parseInt(datos[1]);
+        int servidores = Integer.parseInt(datos[2]);
+        int capacidad = Integer.parseInt(datos[3]);
+        
+        String linea;
+        while((linea = br.readLine()) != null)
+          System.out.println(linea);
+   
+        br.close();
+        
+
+        return null;
+		//return new InstanciaPHub(nodos, servidores, distancia, demanda, capacidad);
+
+    }
+	
+
+	public static void main(String[] args) {
+		try {
+			leerInstancia("instancias/phub_50_5_1.txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

@@ -1,0 +1,23 @@
+package es.urjc.phub;
+
+import java.util.Scanner;
+
+public class PHub {
+	
+	
+	
+	static InstanciaPHub leerInstancia(String filepath){
+		BufferedReader br = new BufferedReader (new FileReader (filepath));
+		 
+        // Leemos la primera linea
+        s1 = br.readLine();
+		return null;
+
+    }
+	
+
+	public static void main(String[] args) {
+		leerInstancia("instancias/phub_50_5_1.txt");
+	}
+
+}

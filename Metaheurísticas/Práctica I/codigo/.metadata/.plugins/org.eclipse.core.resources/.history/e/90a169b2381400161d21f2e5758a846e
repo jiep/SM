@@ -1,0 +1,15 @@
+package es.urjc.phub;
+
+public class PHub {
+	
+	InstanciaPHub instanciaPHub = 
+	
+	static void leerInstancia(String filepath){
+		
+	}
+
+	public static void main(String[] args) {
+
+	}
+
+}

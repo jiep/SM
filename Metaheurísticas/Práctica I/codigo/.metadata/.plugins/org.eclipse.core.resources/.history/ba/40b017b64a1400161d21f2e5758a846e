@@ -1,0 +1,12 @@
+package es.urjc.phub;
+
+public class Solución {
+
+	private boolean[] solucion;
+	private double objetivo;
+	
+	public Solución(int tamaño){
+		this.solucion =  new boolean[tamaño];
+		
+	}
+}

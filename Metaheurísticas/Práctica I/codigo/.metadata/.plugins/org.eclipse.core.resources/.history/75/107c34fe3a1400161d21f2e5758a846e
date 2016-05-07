@@ -1,0 +1,31 @@
+package es.urjc.phub;
+
+import java.io.IOException;
+import java.util.Scanner;
+
+public class PHub {
+	
+	
+	
+	static InstanciaPHub leerInstancia(String filepath){
+		Scanner scan = new Scanner(filepath);
+		while(scan.hasNextLine()) {
+		    String line = scan.nextLine();
+		    System.out.println(line);
+		}
+		scan.close();
+		
+		return null;
+
+    }
+	
+
+	public static void main(String[] args) {
+		try {
+			leerInstancia("instancias/phub_50_5_1.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+}
