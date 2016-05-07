@@ -18,7 +18,6 @@ public class PHub {
 		for (int i = 0; i < ficheros.length; i++) {
 			if (ficheros[i].isFile()) {
 				instancias.add(leerInstancia(ficheros[i].getPath()));
-				System.out.println("File " + ficheros[i].getPath());
 			}
 		}
 
@@ -115,8 +114,38 @@ public class PHub {
 	}
 
 	public static void main(String[] args) {
-			
+
+		// Generamos 1000 simulaciones de cada instancia
+
+		int n = 1000;
+
+		// Cargamos las instancias de cada fichero
 		List<InstanciaPHub> instancias = leerInstanciasDesdeDirectorio("instancias");
+		
+		List<Solución> mejores_soluciones = new ArrayList<>();
+		for (InstanciaPHub instancia : instancias) {
+			System.out.println("Instancia: " + instancia);
+			Solución mejor_solucion = null;
+			double obj = 100000000;
+			for (int i = 0; i < n; i++) {
+				Solución s1 = instancia.generarSoluciónAleatoria();
+				if(s1.getObjetivo() < obj){
+					mejor_solucion = s1;
+					obj = s1.getObjetivo();
+				}
+			}
+			mejores_soluciones.add(mejor_solucion);
+			System.out.println("Mejor objetivo: " + mejor_solucion.getObjetivo());
+
+		}
+
+		/*
+		 * for (int i = 0; i < instancias.get(0).getDistancia().length; i++) {
+		 * for (int j = 0; j < instancias.get(0).getDistancia().length; j++) {
+		 * System.out.print(instancias.get(0).getDistancia()[i][j] + " "); }
+		 * System.out.print("\n"); }
+		 */
+
 	}
 
 }
