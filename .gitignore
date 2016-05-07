@@ -159,7 +159,6 @@ pythontex-files-*/
 TSWLatexianTemp*
 .Rproj.user
 
-# Eclipse
 
 
 .metadata
@@ -212,3 +211,8 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+*.snap
+*.snap
+*.resources
+*.xmi
+*.snap
