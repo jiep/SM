@@ -23,7 +23,7 @@ public class Solución {
 	public Solución(boolean[] solucion, boolean[][] matrizAdyacencia, double[][] dist){
 		this.solucion = solucion;
 		this.matrizAdyacencia = matrizAdyacencia;
-		this.objetivo = calcularObjetivo(solucion, matrizAdyacencia, dist);
+		this.objetivo = Utils.calcularObjetivo(solucion, matrizAdyacencia, dist);
 	}
 	
 	
@@ -61,19 +61,4 @@ public class Solución {
 		this.objetivo = objetivo;
 	}
 
-
-
-	public double calcularObjetivo(boolean[] solucion, boolean[][] matrizAdyacencia, double[][] distancia) {
-		double obj = 0;
-		for(int i = 0; i < matrizAdyacencia.length; i++){
-			for(int j = 0; j <= i; j++){
-				// Si hay conexión entre los nodos, sumamos 
-				if(matrizAdyacencia[i][j]){
-					obj += distancia[i][j];
-				}
-			}
-		}
-		
-		return obj;
-	}
 }
