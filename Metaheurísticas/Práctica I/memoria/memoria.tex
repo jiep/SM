@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper,twoside,openright,titlepage,final]{article}
+\documentclass[11pt,a4paper,twoside,openright,titlepage,final]{article}
 \usepackage{fontspec}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -51,10 +51,6 @@
 \thispagestyle{empty}
 \newpage
 
-\listoffigures
-\thispagestyle{empty}
-\newpage
-
 \tableofcontents
 \thispagestyle{empty}
 \newpage
@@ -65,14 +61,207 @@
 
 \section{Introducción}
 
+El problema del capacited p-hub consiste en determinar los $p$ centros (hubs) que actúan como servidores y conectar todos los clientes a uno de los servidores de forma que se minimice el la suma de las distancias de los clientes a los servidores. Además, cada servidor sólo puede puede servir una determinada cantidad de recursos, y cada cliente tiene una demanda que deben ser satisfechas. De forma matemática, el modelo se formula así:
 
-\section{Resolución del caso práctico}
+\begin{alignat*}{2}
+\text{Minimizar }   & \sum_{i} \sum_{j} d_{ij}x_{ij}  \\
+\text{s.a. } &  \sum_{j} x_{ij} = 1 \quad \forall i\\
+&  x_{ij} \leq y_j \quad \forall i,j\\
+& \sum_{j} y_j = p \\
+& x_{ij}, y_j \in \{0,1\} \\
+& \sum_{i} x_{ij} b_j \leq c
+\end{alignat*}
 
+donde
+
+\begin{itemize}
+	\item $x_{ij}$ es $1$ si hay arista entre el cliente $i$ y el servidor $j$.
+	\item $y_i$ es $1$  si $j$ es servidor, $0$ en caso contrario.
+	\item $d_{ij}$ es la distancia entre el nodo $i$ y el $j$.
+	\item $b_j$ es la demanda del nodo $j$
+	\item $c$ es la capacidad del servidor
+\end{itemize}
+
+\section{Resolución de la práctica}
+
+A continuación, resolveremos las cuestiones planteadas en la práctica.
+
+\subsection{Estructuras de datos de las instancias}
+
+Las instancias para el problema del \textit{p-hub} se encuentran en la clase \texttt{InstanciaPHub}, cuyos atributos son los siguientes:
+
+\begin{enumerate}
+	\item nodos: número de nodos de la instancia.
+	\item servidores: número de servidores de la instancia (p).
+	\item distancia: matriz cuadrada que contiene la distancia entre cada par de nodos, calculada a partir de las coordenadas de cada centro usando la distancia euclídea, esto es,
+	
+	\begin{equation}
+	\label{eq:distancia}
+	d(\mathbf{x} =(x_1,\dots, x_n), \mathbf{y} = (y_1,\dots, y_n)) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2 }
+	\end{equation}
+	
+	\item demanda: vector con la demanda de cada nodo.
+	\item capacidad: capacidad de los servidores.
+\end{enumerate}
+
+\subsection{Carga de las instancias}
+
+Las instancias se cargan en memoria gracias al procedimiento \texttt{leerInstancia} de la clase \texttt{PHub}. Este procedimiento recibe como parámetro el nombre del fichero y va leyendo línea a línea los datos del fichero. Estos datos se guardan en sus respectivas estructuras de datos, que se pasan al constructor de la clase \texttt{InstanciaPHub}, que ``genera'' el objeto. Este procedimiento también se encarga de almacenar las posiciones de los centros y las almacena en memoria, para llamar a la función \texttt{calcularDistancias} de la clase \texttt{PHub}, que se encarga de devolver una matriz de distancias haciendo uso de la Ecuación~\ref{eq:distancia}.
+
+\subsection{Estructura de la solución}
+
+Cada solución se guarda en un objeto de la clase \texttt{Solución}, que contiene los siguientes atributos:
+
+\begin{enumerate}
+	\item solución: vector de booleanos que indica \texttt{true}, si el nodo $i$ es un servidor, \texttt{false} en caso contrario.
+	\item matrizAdyacencia: matriz de booleanos, que contiene la matriz de adyacencia del grafo, esto es, \texttt{true}, si hay una arista entre el nodo $i$ y $j$, \texttt{false} en caso contrario.
+	\item objetivo: valor de la función objetivo, es decir, la suma de las aristas existentes entre los clientes y los objetivos. 
+\end{enumerate}
+
+\subsection{Cálculo de la función objetivo}
+
+El cálculo de la función objetivo se realiza en la función \texttt{calcularObjetivo} de la clase \texttt{Utils}, que dada una solución, su matriz de adyacencia y de distancias, calcula su valor.
+
+El código es el siguiente:
+
+\begin{minted}[linenos=true, numberblanklines=true, breaklines=true]{java}
+public static double calcularObjetivo(boolean[] solucion, boolean[][] matrizAdyacencia, double[][] distancia) {
+
+    double obj = 0;
+    for (int i = 0; i < matrizAdyacencia.length; i++) {
+        for (int j = 0; j <= i; j++) {
+            // Si hay conexión entre los nodos, sumamos
+            if (matrizAdyacencia[i][j]) {
+                obj += distancia[i][j];
+            }
+        }
+    }
+    return obj;
+}
+\end{minted}
+
+Esta función recorre la matriz de adyacencia (notar que es simétrica), y si existe una arista entre el nodo $i$ y el $j$, suma la distancia entre estos dos nodos a la variable \texttt{obj}, que se devuelve.
+
+\subsection{Solución aleatoria de una instancia}
+
+Para generar una solución aleatoria de una instancia está la función \texttt{generarSoluciónAleatoria} de la clase \texttt{InstanciaPHub}. El código es el siguiente:
+
+\begin{minted}[linenos=true, numberblanklines=true, breaklines=true]{java}
+public Solución generarSoluciónAleatoria() {
+
+    Solución s1 = null;
+
+    Random x = new Random();
+
+    // Para poder reproducir los resultados
+    x.setSeed(0);
+
+    do{
+        x = new Random();
+
+        int nodos = this.getNodos();
+        int num_servidores = 0;
+
+        boolean[] sol = new boolean[nodos];
+        boolean[][] ady = new boolean[nodos][nodos];
+
+        // Elegimos al azar los servidores
+        while (num_servidores < this.getServidores()) {
+            int aleatorio = 0;
+        
+            do {
+                aleatorio = x.nextInt(nodos);
+            } while (sol[aleatorio]);
+
+            sol[aleatorio] = true;
+
+            num_servidores++;
+        }
+
+        // Generamos las aristas
+        for (int i = 0; i < nodos; i++) {
+            if (!sol[i]) {
+                // Seleccionamos el servidor más cercano que nos encontremos
+                int serv = Utils.seleccionarServidor(i, sol, this.getDistancia());
+
+                ady[i][serv] = true;
+                ady[serv][i] = true;
+            }
+
+         }
+
+         s1 = new Solución(sol, ady, this.getDistancia());
+
+    }while(!Utils.esSoluciónVálida(s1, this));
+
+    return s1 ;
+}
+\end{minted}
+
+En las líneas 20 a 30 se seleccionan al azar los $p$ nodos que actuarán como servidores. Para ello, se generan números aleatorios en el intervalo discreto $[0, \text{número de nodos})$. Una vez que se tienen los nodos que actuarán como servidores, se selecciona a qué servidor se conectará cada cliente. Para ello, se busca el servidor más cercano (el que tiene una menor distancia euclídea) al cliente. De esto se encarga la función \texttt{seleccionarServidor} de la clase \texttt{Utils}. Una vez se tiene el servidor más cercano al cliente, se establece a \texttt{true} la posición de la matriz de adyacencia entre el servidor asignado y el cliente (notar que la matriz de adyacencia es simétrica). Con todos estos datos, se crea un objeto de la clase \texttt{Solución} y se comprueba si es una solución válida, es decir, si cumple las restricciones del problema. Si lo es, se devuelve la solución, y en caso contrario se repite el proceso anterior hasta que se obtenga una solución válida.\\
+
+El código de la función \texttt{esSoluciónVálida} de la clase \texttt{Utils} es el siguiente:
+
+\begin{minted}[linenos=true, numberblanklines=true, breaklines=true]{java}
+public static boolean esSoluciónVálida(Solución s, InstanciaPHub instancia) {
+    boolean esValida = false;
+
+    boolean[][] ady = s.getMatrizAdyacencia();
+    boolean[] sol = s.getSolucion();
+    int capacidad = instancia.getCapacidad();
+
+    // Comprobamos si se cumple el criterio de la demanda
+    for (int i = 0; i < sol.length; i++) {
+        int demanda = 0;
+        for (int j = 0; j < sol.length; j++) {
+            if (sol[i] && ady[i][j]) {
+                demanda += instancia.getDemanda()[j];
+            }
+        }
+
+        if (demanda <= capacidad && demanda != 0) {
+            esValida = true;
+        } else {
+	        esValida = false;
+        }
+     }
+     return esValida;
+}
+\end{minted}
+
+En las líneas 9 a 20 se recorre el vector solución (que contiene \texttt{true}, si el nodo $i$ es un servidor, y \texttt{false} en caso contrario) para comprobar si se cumple la restricción de la demanda, esto es, si la suma de las demanda de cada cliente es menor o igual a la capacidad del servidor. Si se comprueba que todos los servidores tienen una demanda menor a la capacidad se devuelve \texttt{true}. En caso contrario \texttt{false}.
+
+\subsection{Programa principal}
+
+El programa principal se encarga de generar $1000$ soluciones aleatorias de cada una de las instancias, y devolviendo el valor de la función objetivo y la estructura de la mejor solución de cada instancia.\\
+
+Los valores de la mejor solución de cada instancia se muestran en la Tabla~\ref{tbl:mejores}.\\
+
+\begin{table}[htbp!]
+	\centering
+	\caption{Mejores soluciones de cada instancia}
+	\label{tbl:mejores}
+	\begin{tabular}{@{}ccc@{}}
+		\toprule
+		Instancia & Función objetivo & Servidores               \\ \midrule
+		1         & 768.543          & {[}5,9,10,21,23{]}       \\
+		2         & 833.446          & {[}4,5,6,12,16{]}        \\
+		3         & 802.602          & {[}22,24,36,38,48{]}     \\
+		4         & 797.988          & {[}15,34,38,47,50{]}     \\
+		5         & 709.911          & {[}3,7,8,11,23{]}        \\
+		6         & 687.306          & {[}14,16,22,36,40{]}     \\
+		7         & 851.012          & {[}11,19, 32,41,50{]}    \\
+		8         & 800.853          & {[}4, 13, 32, 36, 48{]}  \\
+		9         & 802.646          & {[}14, 18, 28, 40, 47{]} \\
+		10        & 756.424          & {[}10, 12, 22, 23, 38{]} \\ \bottomrule
+	\end{tabular}
+\end{table}
+
+Notar que se han omitido la matriz de adyacencia por claridad. Las soluciones completas se pueden encontrar en el fichero \texttt{mejores\_soluciones.txt} adjunto a esta memoria.
 
 
 \section{Conclusiones}
 
-\newpage
-
+En esta práctico nos hemos introducido en el problema p-hub. Hemos cargado instancias de este problema en memoria y hemos generado soluciones aleatorias de cada una de las instancias. En último lugar hemos simulado 1000 soluciones de cada instancia y hemos seleccionado la mejor (la que tenía menor valor de la función objetivo).
 
 \end{document}
