@@ -65,14 +65,139 @@
 
 \section{Introducción}
 
+En esta práctica realizaremos búsquedas locales para el problema del p-hub.
 
-\section{Resolución del caso práctico}
+\section{Resolución de la práctica}
 
+A continuación, resolveremos todos las cuestiones planteadas de la práctica.
+
+\subsection{Definir una búsqueda local}
+
+El código para realizar una búsqueda local a partir de su vecindad y el tipo de orden (lexicográfico o aleatorio) se puede ver a continuación (función \texttt{busquedaLocal} de la clase \texttt{Utils}):
+
+\begin{minted}[linenos=true, numberblanklines=true, breaklines=true]{java}
+public static Solución busquedaLocal(String tipo_orden, List<Solución> vecindades, Solución actual) {
+    Solución mejor_solución = actual;
+
+    if (tipo_orden == "lexicográfico") {
+        for (int i = 0; i < vecindades.size(); i++) {
+            if (vecindades.get(i).getObjetivo() < mejor_solución.getObjetivo()) {
+                mejor_solución = vecindades.get(i);
+            }
+        }
+    } else if (tipo_orden == "aleatorio") {
+        // Generamos un número aleatorio entre 0 y número de vecindades
+
+        // Copiamos la lista con las vecindades
+        List<Solución> vecindades_copia = new ArrayList<Solución>(vecindades);
+
+        int n = vecindades_copia.size();
+
+        Solución s = null;
+
+        while (n > 1) {
+            n = vecindades_copia.size();
+            Random r = new Random();
+            int indice = r.nextInt(n);
+            s = vecindades_copia.get(indice);
+
+            if (s.getObjetivo() < mejor_solución.getObjetivo()) {
+                mejor_solución = s;
+            }
+
+            // Eliminamos de la vecindad
+            vecindades_copia.remove(s);
+        }
+
+    }
+    return mejor_solución;
+}
+\end{minted} 
+
+En las líneas 4 a 9 se realiza la búsqueda por orden lexicográfico y de las líneas 10 a 32 se realiza por orden aleatorio.\\
+En el caso de la búsqueda lexicográfica se comparan las soluciones de la vecindad con la mejor solución actual, se selecciona ésta como mejor solución actual y se continúa el proceso hasta que se acaban las soluciones de las vecindad.\\
+Notar que seguimos el orden que viene en la lista de soluciones vecinas, puesto que éstas vienen en ese orden.\\
+En el caso del orden aleatorio, se genera un número aleatorio en el intervalo discreto $[0, \text{número de elementos vecindad})$ y se selecciona el índice que corresponde con el número aleatorio, se compara con la mejor solución actual y se elimina de la vecindad.\\
+
+El código para obtener la vecindad a partir de una solución y su instancia está en la función \texttt{generarVecindad} de la clase \texttt{PHub}. Esta función busca un cliente y un servidor, intercambia sus papeles y genera una nueva matriz de adyacencia con esa configuración.
+
+\begin{minted}[linenos=true, numberblanklines=true, breaklines=true]{java}
+static List<Solución> generarVecindad(Solución s, InstanciaPHub instancia) {
+    List<Solución> vecindad = new ArrayList<>();
+    boolean[] sol = s.getSolucion();
+    boolean[] sol2 = new boolean[sol.length];
+
+    int nodos = sol.length;
+
+    // Generamos las permutaciones
+    for (int i = 0; i < sol.length; i++) {
+        for (int j = 0; j < sol.length; j++) {
+            // Buscamos un true y un falso entre un servidor y un cliente
+            if (sol[i] == true && sol[j] == false) {
+                // Copiamos el array sol
+                System.arraycopy(sol, 0, sol2, 0, sol.length);
+
+                // Intercambiamos las posiciones
+                sol2[i] = false;
+                sol2[j] = true;
+
+                // Creamos la matriz de adyacencia de la nueva solución
+                boolean[][] ady = new boolean[nodos][nodos];
+                for (int z = 0; z < nodos; z++) {
+                    if (!sol2[z]) {
+                        // Seleccionamos el servidor más cercano que nos
+                        // encontremos
+                        int serv = Utils.seleccionarServidor(z, sol2, instancia.getDistancia());
+
+                        ady[z][serv] = true;
+                        ady[serv][z] = true;
+                     }
+
+                }
+
+                Solución s1 = new Solución(sol2, ady, instancia.getDistancia());
+
+                if (Utils.esSoluciónVálida(s1, instancia)) {
+                    vecindad.add(s1);
+                }
+            }
+        }
+    }
+    return vecindad;
+}
+\end{minted}
+
+En las líneas 9 a 12 se busca un servidor y un cliente y se intercambian sus posiciones. De la línea 21 a la 32, se genera la matriz de adyacencia de la misma forma que para generar una solución aleatoria. Se crea la solución y se comprueba si es válida. En caso afirmativo se añade a la lista de vecinos. Por último, se devuelve la lista de vecinos.
+
+\subsection{Programación de los dos algoritmos}
+
+Elegimos la construcción aleatoria y mejora con orden de exploración lexicográfico (A2) y orden de exploración aleatorio (A3). El código de estos dos algoritmos se implementa en la clase \texttt{Práctica2}.
+
+\begin{minted}[linenos=true, numberblanklines=true, breaklines=true]{java}
+public static Solución constAleatoriaYMejoraLexicográfica(Solución sol, InstanciaPHub instancia){
+
+    Solución result = null;
+    List<Solución> vecindad = PHub.generarVecindad(sol, instancia);
+    result = Utils.busquedaLocal("lexicográfico", vecindad, sol);
+    return result;
+}
+
+public static Solución constAleatoriaYMejoraAleatorio(Solución sol, InstanciaPHub instancia){
+
+    Solución result = null;
+    List<Solución> vecindad = PHub.generarVecindad(sol, instancia);
+    result = Utils.busquedaLocal("aleatorio", vecindad, sol);
+    return result;
+}
+\end{minted}
+
+En ambos casos se genera la vecindad a partir de la solución que se pasa como parámetro, se genera la vecindad, y se realiza la búsqueda según el tipo (lexicográfico o aleatorio).
+
+
+\subsection{Análisis de los resultados}
 
 
 \section{Conclusiones}
-
-\newpage
 
 
 \end{document}

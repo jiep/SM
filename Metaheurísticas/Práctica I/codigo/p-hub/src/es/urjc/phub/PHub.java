@@ -178,6 +178,7 @@ public class PHub {
 		for(int i = 0; i < instancias.size(); i++){
 			System.out.println("Número de instancia: " + i);
 			
+			
 			System.out.println("Solución sin búsqueda: " + Arrays.toString(mejores_soluciones.get(i).getSolucion()));
 			System.out.println("Matriz de adyacencia: " + Arrays.deepToString(mejores_soluciones.get(i).getMatrizAdyacencia()));
 			System.out.println("Función objetivo: " + mejores_soluciones.get(i).getObjetivo());

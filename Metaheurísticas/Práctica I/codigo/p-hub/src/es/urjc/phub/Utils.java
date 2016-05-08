@@ -101,4 +101,49 @@ public class Utils {
 
 		return mejor_solución;
 	}
+	
+	public static Solución busquedaLocalFirst(String tipo_orden, List<Solución> vecindades, Solución actual) {
+		Solución mejor_solución = actual;
+		
+		if (tipo_orden == "lexicográfico") {
+			boolean first = false;
+			
+			for (int i = 0; i < vecindades.size() && !first; i++) {
+				if (vecindades.get(i).getObjetivo() < mejor_solución.getObjetivo()) {
+					mejor_solución = vecindades.get(i);
+					first = true;
+				}
+			}
+		} else if (tipo_orden == "aleatorio") {
+			// Generamos un número aleatorio entre 0 y número de vecindades
+			
+			// Copiamos la lista con las vecindades
+			List<Solución> vecindades_copia = new ArrayList<Solución>(vecindades);
+
+
+			int n = vecindades_copia.size();
+
+			Solución s = null;
+			
+			boolean first = false;
+
+			while (n > 1 && !first) {
+				n = vecindades_copia.size();
+				Random r = new Random();
+				int indice = r.nextInt(n);
+				s = vecindades_copia.get(indice);
+
+				if (s.getObjetivo() < mejor_solución.getObjetivo()) {
+					mejor_solución = s;
+					first = true;
+				}
+
+				// Eliminamos de la vecindad
+				vecindades_copia.remove(s);
+			}
+
+		}
+
+		return mejor_solución;
+	}
 }
