@@ -174,27 +174,35 @@ En las líneas 9 a 12 se busca un servidor y un cliente y se intercambian sus po
 
 \subsection{Programación de los dos algoritmos}
 
-Elegimos la construcción aleatoria y mejora con orden de exploración lexicográfico (A2) y orden de exploración aleatorio (A3). El código de estos dos algoritmos se implementa en la clase \texttt{Práctica2}.
+Elegimos la construcción aleatoria y mejora con orden de exploración lexicográfico (A2) y orden de exploración aleatorio (A3). El código de estos dos algoritmos se implementa en la clase \texttt{Práctica2}. El código del algoritmo A2 se muestra a continuación:
 
 \begin{minted}[linenos=true, numberblanklines=true, breaklines=true]{java}
-public static Solución constAleatoriaYMejoraLexicográfica(Solución sol, InstanciaPHub instancia){
+public static Solución constAleatoriaYMejoraLexicográfica(Solución sol, InstanciaPHub instancia, long tiempo) {
 
-    Solución result = null;
+    Solución mejor = sol;
+    long inicio = System.currentTimeMillis();
+    long fin = inicio + tiempo;
     List<Solución> vecindad = PHub.generarVecindad(sol, instancia);
-    result = Utils.busquedaLocal("lexicográfico", vecindad, sol);
-    return result;
+
+    boolean noEsMejor = true;
+    long actual;
+    while ((actual = System.currentTimeMillis()) <= fin) {
+        Solución result = Utils.busquedaLocal("lexicográfico", vecindad, mejor);
+        if (result.getObjetivo() < mejor.getObjetivo()) {
+            mejor = result;
+            vecindad = PHub.generarVecindad(mejor, instancia);				
+        } else {
+            noEsMejor = true;
+        }
+    }
+    return mejor;
 }
 
-public static Solución constAleatoriaYMejoraAleatorio(Solución sol, InstanciaPHub instancia){
-
-    Solución result = null;
-    List<Solución> vecindad = PHub.generarVecindad(sol, instancia);
-    result = Utils.busquedaLocal("aleatorio", vecindad, sol);
-    return result;
-}
 \end{minted}
 
-En ambos casos se genera la vecindad a partir de la solución que se pasa como parámetro, se genera la vecindad, y se realiza la búsqueda según el tipo (lexicográfico o aleatorio).
+El algoritmo genera la vecindad a partir de la solución que se pasa como parámetro, se comprueba si la solución es mejor, y si lo es se guarda como mejor solución y se genera su vecindad. Este proceso sigue hasta que finaliza el tiempo que se le pasa a la función como parámetro.\\
+
+El código del algoritmo A3 se idéntico al anterior salvo en la línea 11, donde se cambia el orden lexicográfico por aleatorio.
 
 
 \subsection{Análisis de los resultados}
@@ -205,32 +213,32 @@ En la Tabla~\ref{tbl:comp} se muestran los resultados de la ejecución de los al
 	\centering
 	\caption{Comparativa de resultados}
 	\label{tbl:comp}
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{@{}ccccccccc@{}}
-			\toprule
-			\multirow{3}{*}{Instancia} & \multicolumn{4}{c}{Best improvement}                                                      & \multicolumn{4}{c}{First improvement}                                                     \\ \cmidrule(l){2-9} 
-			& \multicolumn{2}{c}{Orden lexicográfico}     & \multicolumn{2}{c}{Orden aleatorio}         & \multicolumn{2}{c}{Orden lexicográfico}     & \multicolumn{2}{c}{Orden aleatorio}         \\ \cmidrule(l){2-9} 
-			& Función objetivo & Servidores               & Función objetivo & Servidores               & Función objetivo & Servidores               & Función objetivo & Servidores               \\ \midrule
-			1                          & 839.262          & {[}5, 30, 39, 43, 50{]}  & 839.262          & {[}5, 30, 39, 43, 50{]}  & 940.312          & {[}5, 30, 39, 43, 50{]}  & 900.653          & {[}5, 30, 39, 43, 50{]}  \\
-			2                          & 842.792          & {[}10, 26, 29, 40, 50{]} & 842.792          & {[}10, 26, 29, 40, 50{]} & 878.318          & {[}10, 26, 29, 40, 50{]} & 870.425          & {[}10, 26, 29, 40, 50{]} \\
-			3                          & 814.225          & {[}10, 26, 31, 38, 50{]} & 814.225          & {[}10, 26, 31, 38, 50{]} & 940.431          & {[}10, 26, 31, 38, 50{]} & 926.313          & {[}10, 26, 31, 38, 50{]} \\
-			4                          & 951.370          & {[}1, 8, 16, 18, 50{]}   & 951.370          & {[}1, 8, 16, 18, 50{]}   & 1187.107         & {[}1, 8, 16, 18, 50{]}   & 974.978          & {[}1, 8, 16, 18, 50{]}   \\
-			5                          & 683.575          & {[}9, 13, 22, 27, 50{]}  & 683.575          & {[}9, 13, 22, 27, 50{]}  & 716.234          & {[}9, 13, 22, 27, 50{]}  & 683.659          & {[}9, 13, 22, 27, 50{]}  \\
-			6                          & 732.835          & {[}13, 19, 20, 23, 50{]} & 732.835          & {[}13, 19, 20, 23, 50{]} & 870.756          & {[}13, 19, 20, 23, 50{]} & 807.549          & {[}13, 19, 20, 23, 50{]} \\
-			7                          & 872.203          & {[}6, 9, 20, 46, 50{]}   & 872.203          & {[}6, 9, 20, 46, 50{]}   & 913.547          & {[}6, 9, 20, 46, 50{]}   & 937.001          & {[}6, 9, 20, 46, 50{]}   \\
-			8                          & 861.647          & {[}14, 16, 34, 36, 50{]} & 861.647          & {[}14, 16, 34, 36, 50{]} & 968.366          & {[}14, 16, 34, 36, 50{]} & 909.729          & {[}14, 16, 34, 36, 50{]} \\
-			9                          & 859.900          & {[}13, 14, 17, 23, 50{]} & 859.900          & {[}13, 14, 17, 23, 50{]} & 1083.282         & {[}13, 14, 17, 23, 50{]} & 1083.282         & {[}13, 14, 17, 23, 50{]} \\
-			10                         & 793.365          & {[}8, 14, 21, 28, 50{]}  & 793.365          & {[}8, 14, 21, 28, 50{]}  & 970.672          & {[}8, 14, 21, 28, 50{]}  & 924.900          & {[}8, 14, 21, 28, 50{]}  \\ \bottomrule
-		\end{tabular}%
-	}
+\resizebox{\textwidth}{!}{%
+	\begin{tabular}{@{}ccccccccc@{}}
+		\toprule
+		\multirow{3}{*}{Instancia} & \multicolumn{4}{c}{Best improvement}                                                      & \multicolumn{4}{c}{First improvement}                                                     \\ \cmidrule(l){2-9} 
+		& \multicolumn{2}{c}{Orden lexicográfico}     & \multicolumn{2}{c}{Orden aleatorio}         & \multicolumn{2}{c}{Orden lexicográfico}     & \multicolumn{2}{c}{Orden aleatorio}         \\ \cmidrule(l){2-9} 
+		& Función objetivo & Servidores               & Función objetivo & Servidores               & Función objetivo & Servidores               & Función objetivo & Servidores               \\ \midrule
+		1                          & 952.877          & {[}24, 28, 31, 37, 49{]} & 952.877          & {[}24, 28, 31, 37, 49{]} & 953.776          & {[}24, 28, 31, 37, 49{]} & 952.877          & {[}24, 28, 31, 37, 49{]} \\
+		2                          & 917.405          & {[}7, 23, 33, 40, 50{]}  & 917.405          & {[}7, 23, 33, 40, 50{]}  & 927.784          & {[}7, 23, 33, 40, 50{]}  & 919.901          & {[}7, 23, 33, 40, 50{]}  \\
+		3                          & 987.576          & {[}10, 18, 34, 40, 49{]} & 987.576          & {[}10, 18, 34, 40, 49{]} & 987.576          & {[}10, 18, 34, 40, 49{]} & 987.576          & {[}10, 18, 34, 40, 49{]} \\
+		4                          & 889.546          & {[}4, 11, 16, 42, 50{]}  & 889.546          & {[}4, 11, 16, 42, 50{]}  & 909.138          & {[}4, 11, 16, 42, 50{]}  & 911.626          & {[}4, 11, 16, 42, 50{]}  \\
+		5                          & 777.419          & {[}7, 11, 16, 22, 50{]}  & 777.419          & {[}7, 11, 16, 22, 50{]}  & 800.094          & {[}7, 11, 16, 22, 50{]}  & 790.070          & {[}7, 11, 16, 22, 50{]}  \\
+		6                          & 714.157          & {[}4, 14, 18, 27, 49{]}  & 714.157          & {[}4, 14, 18, 27, 49{]}  & 717.988          & {[}4, 14, 18, 27, 49{]}  & 717.988          & {[}4, 14, 18, 27, 49{]}  \\
+		7                          & 863.546          & {[}4, 11, 14, 38, 49{]}  & 863.546          & {[}4, 11, 14, 38, 49{]}  & 961.614          & {[}4, 11, 14, 38, 49{]}  & 863.546          & {[}4, 11, 14, 38, 49{]}  \\
+		8                          & 873.628          & {[}19, 22, 37, 38, 50{]} & 873.628          & {[}19, 22, 37, 38, 50{]} & 873.628          & {[}19, 22, 37, 38, 50{]} & 874.776          & {[}19, 22, 37, 38, 50{]} \\
+		9                          & 791.706          & {[}2, 4, 13, 24, 50{]}   & 791.706          & {[}2, 4, 13, 24, 50{]}   & 791.923          & {[}2, 4, 13, 24, 50{]}   & 797.231          & {[}2, 4, 13, 24, 50{]}   \\
+		10                         & 827.279          & {[}2, 20, 32, 33, 50{]}  & 827.279          & {[}2, 20, 32, 33, 50{]}  & 837.145          & {[}2, 20, 32, 33, 50{]}  & 805.421          & {[}2, 20, 32, 33, 50{]}  \\ \bottomrule
+	\end{tabular}%
+}
 \end{table}
 
-Se puede observar que el valor de la función objetivo de la búsqueda best improvement siempre es el mismo, tanto si se hace un orden aleatorio como lexicográfico. Esto es debido a que se explora toda la vecindad y se elige la mejor solución, por lo que el orden no importa. Por el contrario, con la búsqueda first improvement, éste orden sí importa y, en este caso, se obtienen mejor resultados con
+Se puede observar que el valor de la función objetivo de la búsqueda best improvement siempre es el mismo, tanto si se hace con orden aleatorio como lexicográfico. Esto es debido a que se explora toda la vecindad y se elige la mejor solución, por lo que el orden no importa. Por el contrario, con la búsqueda first improvement, éste orden sí importa y, en este caso, se obtienen mejor resultados con
 la búsqueda aleatoria.\\
 
-En cuanto a la medida del valor \texttt{dev} hemos obtenido en la búsqueda best improvement un valor de $0.001363$, mientras que en la búsqueda first improvement con orden aleatorio hemos obtenido $6.527\cdot 10^{-4}$ y con orden lexicográfico $2.792 \cdot 10^{-4}$.\\
+En cuanto a la medida del valor \texttt{dev} hemos obtenido en la búsqueda best improvement un valor de $0.00232$, mientras que en la búsqueda first improvement con orden aleatorio hemos obtenido $0.00221$ y con orden lexicográfico $0.00230$.\\
 
-Por tanto, el mejor valor de \texttt{dev} se ha obtenido con la búsqueda first improvement con orden lexicográfico.
+Por tanto, el mejor valor de \texttt{dev} se ha obtenido con la búsqueda first improvement con orden aleatorio, aunque con muy poca diferencia.
 \section{Conclusiones}
 
 En este caso práctico hemos visto cómo implementar búsquedas locales (best y first improvement). Además, hemos visto que el orden de exploración de la vecindad puede suponer grandes diferencias de la función objetivo. En nuestro caso hemos visto que el orden aleatorio produce mejores resultados que el lexicográfico.  
