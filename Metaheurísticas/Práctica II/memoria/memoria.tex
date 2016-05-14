@@ -12,6 +12,7 @@
 \usepackage{microtype}
 \usepackage{ifdraft}
 \usepackage{verbatim}
+\usepackage{multirow}
 \usepackage[obeyDraft]{todonotes}
 \ifdraft{
 	\usepackage{draftwatermark}
@@ -30,6 +31,8 @@
 \usepackage{tikz}
 \usepackage{pdflscape}
 \usepackage{minted}
+\usepackage{pdflscape}
+
 
 %\setsansfont[Ligatures=TeX]{texgyreadventor}
 %\setmainfont[Ligatures=TeX]{texgyrepagella}
@@ -196,8 +199,40 @@ En ambos casos se genera la vecindad a partir de la solución que se pasa como p
 
 \subsection{Análisis de los resultados}
 
+En la Tabla~\ref{tbl:comp} se muestran los resultados de la ejecución de los algoritmos, tanto por tipo de búsqueda (best o first improvement) y por tipo de orden (aleatorio y lexicográfico). El detalle completo de las soluciones puede verse en el fichero \texttt{busqueda\_local.txt} que se encuentra en el mismo directorio que esta memoria.\\
 
+\begin{table}[htbp!]
+	\centering
+	\caption{Comparativa de resultados}
+	\label{tbl:comp}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{@{}ccccccccc@{}}
+			\toprule
+			\multirow{3}{*}{Instancia} & \multicolumn{4}{c}{Best improvement}                                                      & \multicolumn{4}{c}{First improvement}                                                     \\ \cmidrule(l){2-9} 
+			& \multicolumn{2}{c}{Orden lexicográfico}     & \multicolumn{2}{c}{Orden aleatorio}         & \multicolumn{2}{c}{Orden lexicográfico}     & \multicolumn{2}{c}{Orden aleatorio}         \\ \cmidrule(l){2-9} 
+			& Función objetivo & Servidores               & Función objetivo & Servidores               & Función objetivo & Servidores               & Función objetivo & Servidores               \\ \midrule
+			1                          & 839.262          & {[}5, 30, 39, 43, 50{]}  & 839.262          & {[}5, 30, 39, 43, 50{]}  & 940.312          & {[}5, 30, 39, 43, 50{]}  & 900.653          & {[}5, 30, 39, 43, 50{]}  \\
+			2                          & 842.792          & {[}10, 26, 29, 40, 50{]} & 842.792          & {[}10, 26, 29, 40, 50{]} & 878.318          & {[}10, 26, 29, 40, 50{]} & 870.425          & {[}10, 26, 29, 40, 50{]} \\
+			3                          & 814.225          & {[}10, 26, 31, 38, 50{]} & 814.225          & {[}10, 26, 31, 38, 50{]} & 940.431          & {[}10, 26, 31, 38, 50{]} & 926.313          & {[}10, 26, 31, 38, 50{]} \\
+			4                          & 951.370          & {[}1, 8, 16, 18, 50{]}   & 951.370          & {[}1, 8, 16, 18, 50{]}   & 1187.107         & {[}1, 8, 16, 18, 50{]}   & 974.978          & {[}1, 8, 16, 18, 50{]}   \\
+			5                          & 683.575          & {[}9, 13, 22, 27, 50{]}  & 683.575          & {[}9, 13, 22, 27, 50{]}  & 716.234          & {[}9, 13, 22, 27, 50{]}  & 683.659          & {[}9, 13, 22, 27, 50{]}  \\
+			6                          & 732.835          & {[}13, 19, 20, 23, 50{]} & 732.835          & {[}13, 19, 20, 23, 50{]} & 870.756          & {[}13, 19, 20, 23, 50{]} & 807.549          & {[}13, 19, 20, 23, 50{]} \\
+			7                          & 872.203          & {[}6, 9, 20, 46, 50{]}   & 872.203          & {[}6, 9, 20, 46, 50{]}   & 913.547          & {[}6, 9, 20, 46, 50{]}   & 937.001          & {[}6, 9, 20, 46, 50{]}   \\
+			8                          & 861.647          & {[}14, 16, 34, 36, 50{]} & 861.647          & {[}14, 16, 34, 36, 50{]} & 968.366          & {[}14, 16, 34, 36, 50{]} & 909.729          & {[}14, 16, 34, 36, 50{]} \\
+			9                          & 859.900          & {[}13, 14, 17, 23, 50{]} & 859.900          & {[}13, 14, 17, 23, 50{]} & 1083.282         & {[}13, 14, 17, 23, 50{]} & 1083.282         & {[}13, 14, 17, 23, 50{]} \\
+			10                         & 793.365          & {[}8, 14, 21, 28, 50{]}  & 793.365          & {[}8, 14, 21, 28, 50{]}  & 970.672          & {[}8, 14, 21, 28, 50{]}  & 924.900          & {[}8, 14, 21, 28, 50{]}  \\ \bottomrule
+		\end{tabular}%
+	}
+\end{table}
+
+Se puede observar que el valor de la función objetivo de la búsqueda best improvement siempre es el mismo, tanto si se hace un orden aleatorio como lexicográfico. Esto es debido a que se explora toda la vecindad y se elige la mejor solución, por lo que el orden no importa. Por el contrario, con la búsqueda first improvement, éste orden sí importa y, en este caso, se obtienen mejor resultados con
+la búsqueda aleatoria.\\
+
+En cuanto a la medida del valor \texttt{dev} hemos obtenido en la búsqueda best improvement un valor de $0.001363$, mientras que en la búsqueda first improvement con orden aleatorio hemos obtenido $6.527\cdot 10^{-4}$ y con orden lexicográfico $2.792 \cdot 10^{-4}$.\\
+
+Por tanto, el mejor valor de \texttt{dev} se ha obtenido con la búsqueda first improvement con orden lexicográfico.
 \section{Conclusiones}
 
+En este caso práctico hemos visto cómo implementar búsquedas locales (best y first improvement). Además, hemos visto que el orden de exploración de la vecindad puede suponer grandes diferencias de la función objetivo. En nuestro caso hemos visto que el orden aleatorio produce mejores resultados que el lexicográfico.  
 
 \end{document}

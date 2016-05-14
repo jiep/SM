@@ -69,6 +69,7 @@ public static Solución constAleatoriaYMejoraLexicográficaFirst(Solución sol, Ins
 		double dev_aleatorio_first = 0;
 		double dev_lexicografico_first = 0;
 
+		String s = "";
 		
 		for(InstanciaPHub instancia : instancias){
 			Solución sol_aleatoria = instancia.generarSoluciónAleatoria();
@@ -83,10 +84,11 @@ public static Solución constAleatoriaYMejoraLexicográficaFirst(Solución sol, Ins
 			System.out.println("Matriz de adyacencia: " + Arrays.deepToString(sol_aleatoria.getMatrizAdyacencia()));
 			System.out.println("Función objetivo: " + sol_aleatoria.getObjetivo());
 			System.out.println();
-			
+		
+		
 			Solución sol_busq_aleatoria = constAleatoriaYMejoraAleatorio(sol_aleatoria, instancia);
 			Solución sol_busq_lexicografico = constAleatoriaYMejoraLexicográfica(sol_aleatoria, instancia);
-			
+				
 			System.out.println("Búsqueda lexicográfica:");
 			int servidores[] = new int[instancia.getServidores()];
 			
@@ -104,12 +106,15 @@ public static Solución constAleatoriaYMejoraLexicográficaFirst(Solución sol, Ins
 			System.out.println("Función objetivo: " + sol_busq_lexicografico.getObjetivo());
 			System.out.println();
 			
+			s+= sol_busq_lexicografico.getObjetivo() + ";" + Arrays.toString(servidores) + ";";
+
+			
 			System.out.println("Búsqueda aleatoria:");
 			servidores = new int[instancia.getServidores()];
 			
 			cuenta = 0;
-			for(int indice = 0; indice < sol_busq_lexicografico.getSolucion().length; indice++){
-				if(sol_busq_lexicografico.getSolucion()[indice]){
+			for(int indice = 0; indice < sol_busq_aleatoria.getSolucion().length; indice++){
+				if(sol_busq_aleatoria.getSolucion()[indice]){
 					servidores[cuenta] = indice+1;
 					cuenta++;
 				}
@@ -121,6 +126,10 @@ public static Solución constAleatoriaYMejoraLexicográficaFirst(Solución sol, Ins
 			System.out.println("Función objetivo: " + sol_busq_aleatoria.getObjetivo());
 			System.out.println();
 			
+			s+= sol_busq_aleatoria.getObjetivo() + ";" + Arrays.toString(servidores) + ";";
+
+			
+
 			
 			System.out.println("----Búsqueda first improvement:");
 			
@@ -138,6 +147,9 @@ public static Solución constAleatoriaYMejoraLexicográficaFirst(Solución sol, Ins
 				}
 			}
 			
+			s+= sol_busq_lexicografico_first.getObjetivo() + ";" + Arrays.toString(servidores) + ";";
+
+			
 			System.out.println("Servidores: " + Arrays.toString(servidores));
 			System.out.println("Solución tras búsqueda: " + Arrays.toString(sol_busq_lexicografico_first.getSolucion()));
 			System.out.println("Matriz de adyacencia: " + Arrays.deepToString(sol_busq_lexicografico_first.getMatrizAdyacencia()));
@@ -148,12 +160,13 @@ public static Solución constAleatoriaYMejoraLexicográficaFirst(Solución sol, Ins
 			servidores = new int[instancia.getServidores()];
 			
 			cuenta = 0;
-			for(int indice = 0; indice < sol_busq_lexicografico.getSolucion().length; indice++){
-				if(sol_busq_lexicografico.getSolucion()[indice]){
+			for(int indice = 0; indice < sol_busq_aleatoria_first.getSolucion().length; indice++){
+				if(sol_busq_aleatoria_first.getSolucion()[indice]){
 					servidores[cuenta] = indice+1;
 					cuenta++;
 				}
 			}
+			
 			
 			System.out.println("Servidores: " + Arrays.toString(servidores));
 			System.out.println("Solución tras búsqueda: " + Arrays.toString(sol_busq_aleatoria_first.getSolucion()));
@@ -161,6 +174,9 @@ public static Solución constAleatoriaYMejoraLexicográficaFirst(Solución sol, Ins
 			System.out.println("Función objetivo: " + sol_busq_aleatoria_first.getObjetivo());
 			
 			System.out.println("==========================================");
+			
+			s+= sol_busq_aleatoria_first.getObjetivo() + ";" + Arrays.toString(servidores) + ";";
+
 			
 			inst++;
 			
@@ -170,6 +186,8 @@ public static Solución constAleatoriaYMejoraLexicográficaFirst(Solución sol, Ins
 			dev_aleatorio_first += (sol_aleatoria.getObjetivo() - sol_busq_aleatoria_first.getObjetivo())/(100*sol_aleatoria.getObjetivo());
 			dev_lexicografico_first += (sol_aleatoria.getObjetivo() - sol_busq_lexicografico_first.getObjetivo())/(100*sol_aleatoria.getObjetivo());
 
+			
+			s+="\n";
 		}
 		
 		dev_aleatorio /= inst;
@@ -186,6 +204,10 @@ public static Solución constAleatoriaYMejoraLexicográficaFirst(Solución sol, Ins
 		System.out.println("First improvement: ");
 		System.out.println("Dev lexicográfico: " + dev_lexicografico_first);
 		System.out.println("Dev aleatorio: " + dev_aleatorio_first);
+		
+		
+		System.out.println("CSV:----------");
+		System.out.println(s);
 
 
 	}
