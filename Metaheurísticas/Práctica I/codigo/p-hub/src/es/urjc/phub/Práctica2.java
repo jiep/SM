@@ -110,7 +110,7 @@ public class Práctica2 {
 
 		String s = "";
 		
-		long tiempo = 10000; //  10 segundos 
+		long tiempo = 10000; // 10 segundos 
 
 		for (InstanciaPHub instancia : instancias) {
 			Solución sol_aleatoria = instancia.generarSoluciónAleatoria();
