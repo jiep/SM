@@ -31,8 +31,8 @@
 \usepackage{pdflscape}
 \usepackage{minted}
 
-%\setsansfont[Ligatures=TeX]{texgyreadventor}
-%\setmainfont[Ligatures=TeX]{texgyrepagella}
+\setsansfont[Ligatures=TeX]{texgyreadventor}
+\setmainfont[Ligatures=TeX]{texgyrepagella}
 
 \input{portada}
 
@@ -67,7 +67,7 @@
 
 \section{Introducción}
 
-En este caso práctico utilizaremos distintos métodos para generar variables aleatorias; tanto unidimensionales como multidimensionales. En el primer caso generaremos la distribución exponencial y la normal. En el caso multidimensional, generaremos la normal.
+En este caso práctico utilizaremos distintos métodos para generar variables aleatorias; tanto unidimensionales como multidimensionales. En el primer caso generaremos la distribución exponencial y la normal. En el caso multidimensional, generaremos la distribución normal bivariante.
 
 \section{Resolución del caso práctico}
 
@@ -175,7 +175,7 @@ Todo lo anterior hace que estemos ante una muy buena aproximación de la distrib
 
 A continuación generaremos 10000 muestras de una distribución normal bivariante dado por el vector de medias $\mathbf{\mu} = (\mu_x = 3, \mu_y = 2)$, y matriz de varianzas y covarianzas $\Sigma$, donde $\Sigma$ viene dada por
 
-\[ \left( \begin{array}{cc}
+\[ \Sigma = \left( \begin{array}{cc}
 \sigma^2_x = 7^2 & \sigma_{xy}^2 = 4^2\\
 \sigma_{xy}^2 = 4^2 & \sigma_y^2 = 5^2
 \end{array} \right) \]

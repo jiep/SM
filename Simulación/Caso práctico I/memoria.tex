@@ -30,9 +30,11 @@
 \usepackage{tikz}
 \usepackage{pdflscape}
 \usepackage{minted}
+\usepackage[multiple]{footmisc}
 
-%\setsansfont[Ligatures=TeX]{texgyreadventor}
-%\setmainfont[Ligatures=TeX]{texgyrepagella}
+
+\setsansfont[Ligatures=TeX]{texgyreadventor}
+\setmainfont[Ligatures=TeX]{texgyrepagella}
 
 \input{portada}
 
@@ -137,8 +139,7 @@ Los algoritmos para generar números aleatorios son los descritos anteriormente,
 
 La función anterior se encarga de comprobar que los argumentos que se le pasan son correctos, y en caso afirmativo, establece ese algoritmo como generador de números aleatorios.\\
 
-Notar, que además está función tiene la opción \texttt{user-supplied} para establecer nuestras propias funciones que generen números aleatorios. Una descripción completa sobre está opción se puede leer en \url{https://stat.ethz.ch/R-manual/R-devel/library/base/html/Random-user.html}.\\
-
+Notar, que además está función tiene la opción \texttt{user-supplied} para establecer nuestras propias funciones que generen números aleatorios. Una descripción completa sobre está opción se puede leer en \url{https://stat.ethz.ch/R-manual/R-devel/library/base/html/Random-user.html}.
 
 \section{Generador de números aleatorios de Java}
 
@@ -156,9 +157,15 @@ m = 2^{48}
 
 Notar que el número $25214903917$ se corresponde con 5DEECE66D$_{16}$ en base hexadecimal. Este número escrito en base $16$ lo encontraremos posteriormente escrito en el código.\\
 
-La clase Random permite generar números aleatorios uniforme distribuidos en el intervalo $[0,n]$, y en particular en el intervalo $[0,1]$ o generar números aleatorios generados por una distribución normal $\mathcal{N}(0,1)$.\\
+La clase Random permite generar números aleatorios uniforme distribuidos en el intervalo $[0,n]$, y en particular en el intervalo $[0,1]$. También es posible generar números aleatorios con una distribución normal $\mathcal{N}(0,1)$.\\
 
-La función encargada de establecer la semilla con la que se iniciará el generador congruencial. Esta función tiene el nombre \texttt{setSeed} y recibe un parámetro \texttt{seed}, que establece la semilla a
+La función encargada de establecer la semilla con la que se iniciará el generador congruencial tiene el nombre \texttt{setSeed} y recibe un parámetro \texttt{seed}, que establece la semilla a
+
+\begin{verbatim}
+(seed ^ 0x5DEECE66DL) & ((1L << 48) - 1)
+\end{verbatim}
+
+El código completo de la función es el siguiente: 
 
 \begin{minted}{java}
 public synchronized void setSeed(long seed)
@@ -222,40 +229,15 @@ El código de la clase Random se muestra en el Anexo~\ref{app:Random}.
 
 \section{Conclusiones}
 
-En este caso práctico, hemos visto que cada lenguaje de programación tiene generadores de números aleatorios distintos. En el caso de R, es posible elegir entre distintos métodos. Sin embargo, en el caso de Java, sólo tiene un generador que es un generador congruencial lineal. Esto es de vital importancia cuando se quiere realizar una simulación: dependiendo de la calidad de los generadores de números aleatorios, obtendremos una mejor o peor simulación, por lo que a la hora de realizar una simulación deberemos documentarnos qué métodos usa cada lenguaje de programación y usar el que mejor convenga a nuestra simulación, teniendo en cuenta el conocimiento del lenguaje o el tipo de simulación. En este sentido, la página web \url{https://rosettacode.org/wiki/Random_number_generator_(included)} proporciona qué algoritmos implementa cada lenguaje de programación y enlaces de utilidad hacia la documentación de cada uno de ellos.  
+En este caso práctico, hemos visto que cada lenguaje de programación tiene generadores de números aleatorios distintos. En el caso de R, es posible elegir entre distintos métodos. Sin embargo, en el caso de Java, sólo tiene un generador que es un generador congruencial lineal. Esto es de vital importancia cuando se quiere realizar una simulación: dependiendo de la calidad de los generadores de números aleatorios, obtendremos una mejor o peor simulación, por lo que a la hora de realizar una simulación deberemos documentarnos qué métodos usa cada lenguaje de programación y usar el que mejor convenga a nuestra simulación, teniendo en cuenta el conocimiento del lenguaje o el tipo de simulación. En este sentido, la página web \url{https://rosettacode.org/wiki/Random_number_generator_(included)} proporciona qué algoritmos se implementan en cada lenguaje de programación y enlaces de utilidad hacia la documentación de cada uno de ellos.  
 
 \newpage
 \appendix
 \section{Implementación de la clase Random de Java}\label{app:Random}
 
-A continuación, se muestra el código completo de la clase Random de Java.
+A continuación, se muestra el código completo de la clase Random de Java\footnote{\url{http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/tip/src/share/classes/java/util/Random.java}}.
 
 \begin{minted}{java}
-/*
- * Copyright (c) 1995, 2013, Oracle and/or its affiliates. All rights reserved.
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
- *
- * This code is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
- * version 2 for more details (a copy is included in the LICENSE file that
- * accompanied this code).
- *
- * You should have received a copy of the GNU General Public License version
- * 2 along with this work; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
- * or visit www.oracle.com if you need additional information or have any
- * questions.
- */
-
 package java.util;
 import java.io.*;
 import java.util.concurrent.atomic.AtomicLong;
