@@ -193,7 +193,7 @@ public class Práctica3 {
 				beta = Math.pow(10, -i);
 				Solución s = recocidoSimulado(TIPOS_ENFRIAMIENTO.LUNDYyMEES, sol_ini, instancia, temp_ini, nrep, beta, tiempo);
 				
-				System.out.println("---Solución con recocido simulado de tipo Lundy y Mees de parámetro: " + beta);
+				System.out.println("---Solución con recocido simulado de tipo Lundi y Mees de parámetro: " + beta);
 				System.out.println("Solución tras recocido simulado: " + Arrays.toString(s.getSolucion()));
 				System.out.println("Matriz de adyacencia: " + Arrays.deepToString(s.getMatrizAdyacencia()));
 				System.out.println("Función objetivo: " + s.getObjetivo());

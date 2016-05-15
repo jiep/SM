@@ -32,6 +32,7 @@
 \usepackage{pdflscape}
 \usepackage{minted}
 \usepackage{multirow}
+\usepackage{pdflscape}
 
 
 %\setsansfont[Ligatures=TeX]{texgyreadventor}
@@ -201,12 +202,40 @@ Los resultados de la ejecución se pueden ver en la Tabla~\ref{tbl:resultados}. 
 
 Se puede observar que en la primera instancia se obtiene mejor resultado con el método del descenso geométrico, en las instancias 3 y 9, el mejor método es el criterio de Boltzmann, en las instancias 5 y 6 se obtiene la mejor solución con el esquema de Cauchy, en las instancias 2, 4, 7,8 y 10 se obtiene la mejor solución con el método de Landi y Mees. Es decir, con el método del descenso geométrico se obtiene sólo 1 mejor instancia, con el criterio de Boltzmann y el esquema de Cauchy se obtienen 2 instancias y con el método de Landi y Mees se obtienen 5 instancias. Además, este método tiene la mejor media de tiempos. Parece que este método es el mejor de los cuatro (con los parámetros definidos anteriormente).\\
 
-Necesitamos conocer cuál es mejor valor de $\beta$ que minimiza el valor de las instancias. Para ello, repetimos el proceso anterior para distintos parámetros de $\beta$, desde $1$ hasta $10^{-10}$. Los resultados se pueden ver en la Tabla
+Necesitamos conocer cuál es mejor valor de $\beta$ que minimiza el valor de las instancias. Para ello, repetimos el proceso anterior para distintos parámetros de $\beta$, desde $1$ hasta $10^{-10}$. Los resultados se pueden ver en la Tabla~\ref{tbl:resultados_landi}.\\
 
+Se puede observar que no existe un valor claro para el parámetro $\beta$, ya que los valores más bajos se encuentran repartidos entre varios valores del parámetro, por lo que el método del recocido simulado no parece muy adecuado para este problema.\\
+
+\begin{landscape}
+	\vspace*{\fill}
+	\topskip0pt    
+	\begin{table}[htbp!]
+		\centering
+		\caption{Resultados de la ejecución del recocido con el método simulado con la función de enfriamiento de Lundi y Meer para distintos valores del parámetro $\beta$}
+		\label{tbl:resultados_landi}
+		\resizebox{\linewidth}{!}{%
+			\begin{tabular}{@{}cccccccccccc@{}}
+				\toprule
+				Instancia & $\beta = 1$                      & $\beta = 0.1$                    & $\beta = 0.01$                   & $\beta = 0.001$                   & $\beta = 10^{-4}$ & $\beta = 10^{-5}$ & $\beta = 10^{-6}$ & $\beta = 10^{-7}$                & $\beta = 10^{-8}$                & $\beta = 10^{-9}$                & $\beta = 10^{-10}$ \\ \midrule
+				1         & \cellcolor[HTML]{FFFE65}949.7473 & 1021.4972                        & 1024.6271                        & 1009.8923                         & 992.7465          & 1020.6417         & 953.4114          & 1025.7179                        & 1008.4858                        & 1047.6161                        & 835.7937           \\
+				2         & 977.4038                         & 1041.2196                        & 953.5492                         & 871.7219                          & 957.7341          & 1053.8826         & 915.0831          & 1004.9098                        & \cellcolor[HTML]{FFFE65}857.8240 & 972.4778                         & 1126.9264          \\
+				3         & \cellcolor[HTML]{FFFE65}932.5017 & 991.9547                         & 982.9008                         & 1210.2534                         & 1029.4697         & 1069.4225         & 1065.4087         & 986.1165                         & 1009.0223                        & 947.7720                         & 1025.0647          \\
+				4         & 1078.2304                        & 1126.0297                        & 1399.8304                        & \cellcolor[HTML]{FFFE65}1045.2218 & 1170.5624         & 1041.6199         & 1123.5200         & 1102.0909                        & 1109.4818                        & 941.5377                         & 1101.3982          \\
+				5         & 833.1772                         & 973.9489                         & 947.5265                         & 893.9518                          & 895.8671          & 893.9518          & 831.0142          & 977.6251                         & 970.4960                         & \cellcolor[HTML]{FFFE65}815.7073 & 882.6927           \\
+				6         & 1065.6318                        & 1112.4270                        & \cellcolor[HTML]{FFFE65}998.8739 & 1069.9545                         & 1166.3598         & 1409.8105         & 1217.6866         & 1037.1978                        & 1048.5877                        & 1151.3748                        & 1120.7170          \\
+				7         & 1123.1254                        & 1321.5950                        & \cellcolor[HTML]{FFFE65}968.7751 & 1075.8063                         & 1172.2820         & 952.4956          & 1021.7032         & 1138.3258                        & 1225.1920                        & 1060.1519                        & 1082.4603          \\
+				8         & 1109.0940                        & 1198.6742                        & 995.1892                         & 1077.5957                         & 1000.3546         & 1125.2670         & 939.0940          & \cellcolor[HTML]{FFFE65}847.4034 & 920.3130                         & 1020.7196                        & 990.3907           \\
+				9         & 1022.8755                        & \cellcolor[HTML]{FFFE65}828.5532 & 945.0845                         & 929.0698                          & 903.3034          & 1205.3894         & 982.8460          & 1092.2014                        & 1640.6625                        & 1141.2997                        & 985.7689           \\
+				10        & 997.0576                         & 910.6026                         & 922.0289                         & 931.8197                          & 1013.4661         & 1016.7859         & 886.9578          & \cellcolor[HTML]{FFFE65}834.5603 & 1135.09097                       & 905.7793                         & 1082.0464          \\ \bottomrule
+			\end{tabular}%
+		}
+	\end{table}
+	\vspace*{\fill}
+\end{landscape}
 
 \section{Conclusiones}
 
-\newpage
+En este caso práctico hemos visto cómo implementar una de las metaheurísticas vistas en clase: el recocido simulado. Hemos visto que existen diversos métodos para establecer el enfriamiento, dando todos ellos a distintos resultados. Esto hace que sea indispensable probar con distintas metaheurísticas y escoger la que mejor resultados obtenga para un problema concreto.
 
 
 \end{document}
