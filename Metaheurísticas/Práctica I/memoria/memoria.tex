@@ -204,32 +204,37 @@ El código de la función \texttt{esSoluciónVálida} de la clase \texttt{Utils}
 
 \begin{minted}[linenos=true, numberblanklines=true, breaklines=true]{java}
 public static boolean esSoluciónVálida(Solución s, InstanciaPHub instancia) {
-    boolean esValida = false;
-
+    boolean esValida = true;
     boolean[][] ady = s.getMatrizAdyacencia();
     boolean[] sol = s.getSolucion();
     int capacidad = instancia.getCapacidad();
-
+    int demanda[] = new int[instancia.getServidores()];
+    int cont = 0;
+	
     // Comprobamos si se cumple el criterio de la demanda
     for (int i = 0; i < sol.length; i++) {
-        int demanda = 0;
-        for (int j = 0; j < sol.length; j++) {
-            if (sol[i] && ady[i][j]) {
-                demanda += instancia.getDemanda()[j];
+        if (sol[i]) {
+            for (int j = 0; j < sol.length; j++) {
+                if (ady[i][j]) {
+                    demanda[cont] += instancia.getDemanda()[j];
+                }
             }
+            cont++;
+        } 
+    }
+	
+    for (int i = 0; i < demanda.length; i++) {
+        if (demanda[i] > capacidad) {
+		    esValida = false;
         }
-
-        if (demanda <= capacidad && demanda != 0) {
-            esValida = true;
-        } else {
-	        esValida = false;
-        }
-     }
-     return esValida;
+    }
+	
+    return esValida;
+	
 }
 \end{minted}
 
-En las líneas 9 a 20 se recorre el vector solución (que contiene \texttt{true}, si el nodo $i$ es un servidor, y \texttt{false} en caso contrario) para comprobar si se cumple la restricción de la demanda, esto es, si la suma de las demanda de cada cliente es menor o igual a la capacidad del servidor. Si se comprueba que todos los servidores tienen una demanda menor a la capacidad se devuelve \texttt{true}. En caso contrario \texttt{false}.
+En las líneas 9 a 19 se recorre el vector solución (que contiene \texttt{true}, si el nodo $i$ es un servidor, y \texttt{false} en caso contrario) para calcular la demanda de ese servidor. Este proceso se repite para todos los servidores. Una vez calculado, se comprueba si existe algún servidor que no cumple la demanda, esto es, si la suma de las demandas de cada cliente es menor o igual a la capacidad del servidor. Si se comprueba que todos los servidores tienen una demanda menor a la capacidad se devuelve \texttt{true}. En caso contrario \texttt{false}.
 
 \subsection{Programa principal}
 
@@ -244,16 +249,16 @@ Los valores de la mejor solución de cada instancia se muestran en la Tabla~\ref
 	\begin{tabular}{@{}ccc@{}}
 		\toprule
 		Instancia & Función objetivo & Servidores               \\ \midrule
-		1         & 768.543          & {[}5,9,10,21,23{]}       \\
-		2         & 833.446          & {[}4,5,6,12,16{]}        \\
-		3         & 802.602          & {[}22,24,36,38,48{]}     \\
-		4         & 797.988          & {[}15,34,38,47,50{]}     \\
-		5         & 709.911          & {[}3,7,8,11,23{]}        \\
-		6         & 687.306          & {[}14,16,22,36,40{]}     \\
-		7         & 851.012          & {[}11,19, 32,41,50{]}    \\
-		8         & 800.853          & {[}4, 13, 32, 36, 48{]}  \\
-		9         & 802.646          & {[}14, 18, 28, 40, 47{]} \\
-		10        & 756.424          & {[}10, 12, 22, 23, 38{]} \\ \bottomrule
+		1         & 751.8302         & {[}1, 2, 17, 19, 34{]}   \\
+		2         & 855.1385         & {[}9, 16, 20, 34, 39{]}  \\
+		3         & 762.2916         & {[}16, 22, 26, 28, 33{]} \\
+		4         & 776.3040         & {[}26, 28, 34, 35, 41{]} \\
+		5         & 686.0421         & {[}3, 29, 35, 43, 50{]}  \\
+		6         & 689.6972         & {[}4, 22, 29, 40, 49{]}  \\
+		7         & 815.7641         & {[}17, 19, 38, 42, 49{]} \\
+		8         & 824.0950         & {[}4, 19, 34, 46, 49{]}  \\
+		9         & 860.1325         & {[}3, 13, 24, 37, 49{]}  \\
+		10        & 736.3474         & {[}7, 11, 22, 30, 38{]}  \\ \bottomrule
 	\end{tabular}
 \end{table}
 
@@ -262,6 +267,6 @@ Notar que se han omitido la matriz de adyacencia por claridad. Las soluciones co
 
 \section{Conclusiones}
 
-En esta práctico nos hemos introducido en el problema p-hub. Hemos cargado instancias de este problema en memoria y hemos generado soluciones aleatorias de cada una de las instancias. En último lugar hemos simulado 1000 soluciones de cada instancia y hemos seleccionado la mejor (la que tenía menor valor de la función objetivo).
+En esta práctica nos hemos introducido en el problema p-hub. Hemos cargado instancias de este problema en memoria y hemos generado soluciones aleatorias de cada una de las instancias. En último lugar hemos simulado 1000 soluciones de cada instancia y hemos seleccionado la mejor (la que tenía menor valor de la función objetivo).
 
 \end{document}

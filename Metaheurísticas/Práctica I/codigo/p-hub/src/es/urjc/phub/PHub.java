@@ -218,18 +218,27 @@ public class PHub {
 		boolean[] sol2 = new boolean[sol.length];
 
 		int nodos = sol.length;
+		
 
 		// Generamos las permutaciones
 		for (int i = 0; i < sol.length; i++) {
 			for (int j = 0; j < sol.length; j++) {
+				// Copiamos el array sol
+				sol2 = sol.clone();
+				
 				// Buscamos un true y un falso entre un servidor y un cliente
-				if (sol[i] == true && sol[j] == false) {
-					// Copiamos el array sol
-					System.arraycopy(sol, 0, sol2, 0, sol.length);
+				if ((sol[i] == true && sol[j] == false) || (sol[j] == true && sol[i] == false)) {
+				
 
 					// Intercambiamos las posiciones
-					sol2[i] = false;
-					sol2[j] = true;
+					if((sol[i] == true && sol[j] == false)){
+						sol2[i] = false;
+						sol2[j] = true;
+					}else if((sol[j] == true && sol[i] == false)){
+						sol2[j] = false;
+						sol2[i] = true;
+					}
+					
 
 					// Creamos la matriz de adyacencia de la nueva solución
 					boolean[][] ady = new boolean[nodos][nodos];

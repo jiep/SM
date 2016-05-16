@@ -1,5 +1,7 @@
 package es.urjc.phub;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,6 +9,10 @@ import java.util.List;
 public class Práctica1 {
 
 	public static void main(String[] args) {
+		
+		// Establecemos el punto como separador de los decimales
+		DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
+		simbolos.setDecimalSeparator('.');
 
 		// Generamos 1000 simulaciones de cada instancia
 
@@ -43,11 +49,11 @@ public class Práctica1 {
 					cuenta++;
 				}
 			}
-			
+            DecimalFormat df = new DecimalFormat("#.####", simbolos);
 			System.out.println("Solución: " + Arrays.toString(mejor_solucion.getSolucion()));
 			System.out.println("Servidores: " + Arrays.toString(servidores));
 			System.out.println("Matriz de adyacencia: " + Arrays.deepToString(mejor_solucion.getMatrizAdyacencia()));
-			System.out.println("Función objetivo: " + mejor_solucion.getObjetivo());
+			System.out.println("Función objetivo: " + df.format(mejor_solucion.getObjetivo()));
 			System.out.println();
 			inst++;
 			

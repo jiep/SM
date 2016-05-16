@@ -55,14 +55,9 @@
 \thispagestyle{empty}
 \newpage
 
-\listoffigures
-\thispagestyle{empty}
-\newpage
-
 \tableofcontents
 \thispagestyle{empty}
 \newpage
-
 
 \pagenumbering{arabic}
 \setcounter{page}{1}
@@ -162,7 +157,7 @@ De forma similar se implementan los demás métodos.
 
 \subsection{Análisis de los resultados}
 
-Para evaluar este método ejecutamos durante 1 minuto (60 milisegundos) cada una de las instancias con cada uno de las funciones de enfriamiento.\\
+Para evaluar este método ejecutamos durante 1 minuto (60000 milisegundos) cada una de las instancias con cada uno de las funciones de enfriamiento.\\
 
 Los parámetros usados han sido los siguientes:
 
@@ -182,29 +177,30 @@ Los resultados de la ejecución se pueden ver en la Tabla~\ref{tbl:resultados}. 
 	\centering
 	\caption{Resultados de la ejecución del recocido simulado}
 	\label{tbl:resultados}
-	\begin{tabular}{@{}cccccc@{}}
-		\toprule
-		& \multicolumn{4}{c}{Función de enfriamiento}                                                                                                                                                                                                               &                         \\ \cmidrule(lr){2-5}
-		\multirow{-2}{*}{Instancia} & \begin{tabular}[c]{@{}c@{}}Descenso \\ geométrico\end{tabular} & \begin{tabular}[c]{@{}c@{}}Criterio de\\ Boltzmann\end{tabular} & \begin{tabular}[c]{@{}c@{}}Esquema \\ de Cauchy\end{tabular} & \begin{tabular}[c]{@{}c@{}}Lundi \\ y Mees\end{tabular} & \multirow{-2}{*}{Media} \\ \midrule
-		1                           & \cellcolor[HTML]{FFFE65}818.9541                               & 883.8607                                                        & 939.1282                                                     & 891.3631                                                & 883.3266                \\
-		2                           & 1186.6325                                                      & 1438.0429                                                       & 1000.0160                                                    & \cellcolor[HTML]{FFFE65}974.8233                        & 1149.8787               \\
-		3                           & 1152.2130                                                      & \cellcolor[HTML]{FFFE65}996.1984                                & 1103.6910                                                    & 1198.2770                                               & 1112.5949               \\
-		4                           & 1026.4867                                                      & 1009.7156                                                       & 1042.9046                                                    & \cellcolor[HTML]{FFFE65}972.5211                        & 1012.9071               \\
-		5                           & 1018.6530                                                      & 1033.4533                                                       & \cellcolor[HTML]{FFFE65}889.6963                             & 922.5584                                                & 966.0903                \\
-		6                           & 1191.6062                                                      & 1049.2819                                                       & \cellcolor[HTML]{FFFE65}905.0196                             & 1179.4797                                               & 1081.3469               \\
-		7                           & 1142.4889                                                      & 1140.0351                                                       & 1472.7656                                                    & \cellcolor[HTML]{FFFE65}914.2835                        & 1167.3933               \\
-		8                           & 1077.5733                                                      & 1278.6855                                                       & 1149.6770                                                    & \cellcolor[HTML]{FFFE65}890.9676                        & 1099.2259               \\
-		9                           & 1126.6379                                                      & \cellcolor[HTML]{FFFE65}920.1679                                & 971.2918                                                     & 922.4024                                                & 985.1250                \\
-		10                          & 1158.27774                                                     & 1130.5921                                                       & 1121.0358                                                    & \cellcolor[HTML]{FFFE65}935.7108                        & 1086.4042               \\ \midrule
-		Media                       & 1089.9524                                                      & 1088.0034                                                       & 1059.5226                                                    & 980.2387                                                & \multicolumn{1}{l}{}    \\ \bottomrule
-	\end{tabular}
+\begin{tabular}{@{}cccccc@{}}
+	\toprule
+	& \multicolumn{4}{c}{Función de enfriamiento}                                                                                                                                                                                                             &                         \\ \cmidrule(lr){2-5}
+	\multirow{-2}{*}{Instancia} & \begin{tabular}[c]{@{}c@{}}Descenso\\ geométrico\end{tabular} & \begin{tabular}[c]{@{}c@{}}Criterio de\\ Boltzmann\end{tabular} & \begin{tabular}[c]{@{}c@{}}Esquema \\ de Cauchy\end{tabular} & \begin{tabular}[c]{@{}c@{}}Lundi y\\ Meer\end{tabular} & \multirow{-2}{*}{Media} \\ \midrule
+	1                           & 932.4007                                                      & 1160.496                                                        & 991.9606                                                     & \cellcolor[HTML]{FFFE65}831.4168                       & 979.0685                \\
+	2                           & 986.0779                                                      & 1054.8835                                                       & 1105.693                                                     & \cellcolor[HTML]{FFFE65}883.8535                       & 1007.6270               \\
+	3                           & 974.4974                                                      & 994.4498                                                        & 993.2027                                                     & \cellcolor[HTML]{FFFE65}825.3837                       & 946.8834                \\
+	4                           & 1039.086                                                      & \cellcolor[HTML]{FFFE65}980.6139                                & 1150.0283                                                    & 1024.4868                                              & 1048.5538               \\
+	5                           & 929.1119                                                      & 1037.8508                                                       & 949.8733                                                     & \cellcolor[HTML]{FFFE65}712.1517                       & 907.2469                \\
+	6                           & 977.0404                                                      & \cellcolor[HTML]{FFFE65}787.7134                                & 1056.724                                                     & 870.6946                                               & 923.0431                \\
+	7                           & 1021.4352                                                     & 976.2935                                                        & 982.2888                                                     & \cellcolor[HTML]{FFFE65}945.6088                       & 981.4066                \\
+	8                           & 1056.8216                                                     & 1057.9631                                                       & 825.4254                                                     & \cellcolor[HTML]{FFFE65}977.5117                       & 979.4304                \\
+	9                           & 981.1257                                                      & 1074.5005                                                       & 1041.2094                                                    & \cellcolor[HTML]{FFFE65}896.6903                       & 998.3815                \\
+	10                          & 836.5384                                                      & 832.3738                                                        & 950.8749                                                     & \cellcolor[HTML]{FFFE65}757.631                        & 844.3545                \\ \midrule
+	Media                       & 973.4135                                                      & 995.7138                                                        & 1004.7280                                                    & 872.5429                                               &                         \\ \bottomrule
+\end{tabular}
 \end{table}
 
-Se puede observar que en la primera instancia se obtiene mejor resultado con el método del descenso geométrico, en las instancias 3 y 9, el mejor método es el criterio de Boltzmann, en las instancias 5 y 6 se obtiene la mejor solución con el esquema de Cauchy, en las instancias 2, 4, 7,8 y 10 se obtiene la mejor solución con el método de Landi y Mees. Es decir, con el método del descenso geométrico se obtiene sólo 1 mejor instancia, con el criterio de Boltzmann y el esquema de Cauchy se obtienen 2 instancias y con el método de Landi y Mees se obtienen 5 instancias. Además, este método tiene la mejor media de tiempos. Parece que este método es el mejor de los cuatro (con los parámetros definidos anteriormente).\\
+
+Se puede observar que no se obtiene ninguna mejor instancia con el método del descenso geométrico, ni con el esquema de Cauchy, en las instancias 4 y 6, el mejor método es el criterio de Boltzmann, y en las instancias 1, 2, 3, 5, 7, 8, 9 y 10 se obtiene la mejor solución con el método de Landi y Mees. Es decir, con el método de Lundi y Meer se obtienen 8  mejores instancias, con el criterio de Boltzmann se obtienen 2 instancias y con el esquema de Cauchy y el descenso geométrico no se obtiene ninguna instancia. Además, el método de Lundi y Meer tiene la mejor media de valores de la función objetivo. Parece que el mejor de los cuatro métodos es el Lundi y Meer (con los parámetros definidos anteriormente).\\
 
 Necesitamos conocer cuál es mejor valor de $\beta$ que minimiza el valor de las instancias. Para ello, repetimos el proceso anterior para distintos parámetros de $\beta$, desde $1$ hasta $10^{-10}$. Los resultados se pueden ver en la Tabla~\ref{tbl:resultados_landi}.\\
 
-Se puede observar que no existe un valor claro para el parámetro $\beta$, ya que los valores más bajos se encuentran repartidos entre varios valores del parámetro, por lo que el método del recocido simulado no parece muy adecuado para este problema.\\
+Se puede observar que el parámetro con mayor número de instancias con la solución menor es $\beta=0.1$, que parece un buen valor para este método, aunque se deberían realizar prueba de $\beta$ en el intervalo $[0.1, 1]$ para comprobar si se consiguen soluciones mejores que las actuales.\\
 
 \begin{landscape}
 	\vspace*{\fill}
@@ -216,18 +212,18 @@ Se puede observar que no existe un valor claro para el parámetro $\beta$, ya qu
 		\resizebox{\linewidth}{!}{%
 			\begin{tabular}{@{}cccccccccccc@{}}
 				\toprule
-				Instancia & $\beta = 1$                      & $\beta = 0.1$                    & $\beta = 0.01$                   & $\beta = 0.001$                   & $\beta = 10^{-4}$ & $\beta = 10^{-5}$ & $\beta = 10^{-6}$ & $\beta = 10^{-7}$                & $\beta = 10^{-8}$                & $\beta = 10^{-9}$                & $\beta = 10^{-10}$ \\ \midrule
-				1         & \cellcolor[HTML]{FFFE65}949.7473 & 1021.4972                        & 1024.6271                        & 1009.8923                         & 992.7465          & 1020.6417         & 953.4114          & 1025.7179                        & 1008.4858                        & 1047.6161                        & 835.7937           \\
-				2         & 977.4038                         & 1041.2196                        & 953.5492                         & 871.7219                          & 957.7341          & 1053.8826         & 915.0831          & 1004.9098                        & \cellcolor[HTML]{FFFE65}857.8240 & 972.4778                         & 1126.9264          \\
-				3         & \cellcolor[HTML]{FFFE65}932.5017 & 991.9547                         & 982.9008                         & 1210.2534                         & 1029.4697         & 1069.4225         & 1065.4087         & 986.1165                         & 1009.0223                        & 947.7720                         & 1025.0647          \\
-				4         & 1078.2304                        & 1126.0297                        & 1399.8304                        & \cellcolor[HTML]{FFFE65}1045.2218 & 1170.5624         & 1041.6199         & 1123.5200         & 1102.0909                        & 1109.4818                        & 941.5377                         & 1101.3982          \\
-				5         & 833.1772                         & 973.9489                         & 947.5265                         & 893.9518                          & 895.8671          & 893.9518          & 831.0142          & 977.6251                         & 970.4960                         & \cellcolor[HTML]{FFFE65}815.7073 & 882.6927           \\
-				6         & 1065.6318                        & 1112.4270                        & \cellcolor[HTML]{FFFE65}998.8739 & 1069.9545                         & 1166.3598         & 1409.8105         & 1217.6866         & 1037.1978                        & 1048.5877                        & 1151.3748                        & 1120.7170          \\
-				7         & 1123.1254                        & 1321.5950                        & \cellcolor[HTML]{FFFE65}968.7751 & 1075.8063                         & 1172.2820         & 952.4956          & 1021.7032         & 1138.3258                        & 1225.1920                        & 1060.1519                        & 1082.4603          \\
-				8         & 1109.0940                        & 1198.6742                        & 995.1892                         & 1077.5957                         & 1000.3546         & 1125.2670         & 939.0940          & \cellcolor[HTML]{FFFE65}847.4034 & 920.3130                         & 1020.7196                        & 990.3907           \\
-				9         & 1022.8755                        & \cellcolor[HTML]{FFFE65}828.5532 & 945.0845                         & 929.0698                          & 903.3034          & 1205.3894         & 982.8460          & 1092.2014                        & 1640.6625                        & 1141.2997                        & 985.7689           \\
-				10        & 997.0576                         & 910.6026                         & 922.0289                         & 931.8197                          & 1013.4661         & 1016.7859         & 886.9578          & \cellcolor[HTML]{FFFE65}834.5603 & 1135.09097                       & 905.7793                         & 1082.0464          \\ \bottomrule
-			\end{tabular}%
+				Instancia & $\beta = 1$                      & $\beta = 0.1$                    & $\beta = 0.01$                   & $\beta = 0.001$ & $\beta = 10^{-4}$ & $\beta = 10^{-5}$ & $\beta = 10^{-6}$ & $\beta = 10^{-7}$ & $\beta = 10^{-8}$ & $\beta = 10^{-9}$ & $\beta = 10^{-10}$ \\ \midrule
+				1         & \cellcolor[HTML]{FFFE65}708.4036 & \cellcolor[HTML]{FFFE65}708.4036 & \cellcolor[HTML]{FFFE65}708.4036 & 819.0216        & 888.7935          & 1537.5536         & 983.174           & 941.2269          & 960.708           & 1130.6897         & 1031.907           \\
+				2         & \cellcolor[HTML]{FFFE65}829.3524 & \cellcolor[HTML]{FFFE65}829.3524 & 845.3045                         & 959.4793        & 871.7137          & 997.4544          & 1044.877          & 1119.9853         & 1341.9047         & 1103.3533         & 889.3522           \\
+				3         & \cellcolor[HTML]{FFFE65}758.2295 & \cellcolor[HTML]{FFFE65}758.2295 & 781.0541                         & 866.4344        & 827.2772          & 857.758           & 931.0008          & 947.5278          & 1010.2579         & 923.8711          & 909.0433           \\
+				4         & 851.259                          & \cellcolor[HTML]{FFFE65}764.0963 & 771.3152                         & 852.2911        & 878.914           & 1113.301          & 929.5215          & 1178.9504         & 912.6937          & 1191.0961         & 1149.1484          \\
+				5         & \cellcolor[HTML]{FFFE65}671.1279 & 681.3047                         & 671.3733                         & 862.9865        & 785.1307          & 1035.2035         & 802.9528          & 904.586           & 989.3504          & 890.3637          & 851.9101           \\
+				6         & \cellcolor[HTML]{FFFE65}663.1406 & \cellcolor[HTML]{FFFE65}663.1406 & 682.945                          & 738.7844        & 857.4963          & 726.1366          & 826.3958          & 1178.5185         & 814.0449          & 883.9562          & 796.0767           \\
+				7         & 807.82                           & \cellcolor[HTML]{FFFE65}793.2306 & 798.0115                         & 826.2132        & 876.9625          & 887.4507          & 981.5936          & 1119.5116         & 832.6994          & 941.605           & 958.4476           \\
+				8         & 829.1049                         & \cellcolor[HTML]{FFFE65}822.5995 & 827.965                          & 846.9209        & 876.0916          & 962.5802          & 1004.3007         & 923.5164          & 954.9392          & 887.6405          & 917.5369           \\
+				9         & 857.4355                         & \cellcolor[HTML]{FFFE65}840.0549 & 873.247                          & 919.9782        & 1255.2681         & 912.541           & 1211.4791         & 1461.8266         & 962.1836          & 1066.2949         & 995.2715           \\
+				10        & 824.7164                         & \cellcolor[HTML]{FFFE65}722.024  & 742.7818                         & 958.8561        & 914.895           & 762.6091          & 909.6664          & 876.8673          & 1147.981          & 794.522           & 820.6012           \\ \bottomrule
+			\end{tabular}
 		}
 	\end{table}
 	\vspace*{\fill}
@@ -235,7 +231,7 @@ Se puede observar que no existe un valor claro para el parámetro $\beta$, ya qu
 
 \section{Conclusiones}
 
-En este caso práctico hemos visto cómo implementar una de las metaheurísticas vistas en clase: el recocido simulado. Hemos visto que existen diversos métodos para establecer el enfriamiento, dando todos ellos a distintos resultados. Esto hace que sea indispensable probar con distintas metaheurísticas y escoger la que mejor resultados obtenga para un problema concreto.
+En esta práctica hemos visto cómo implementar una de las metaheurísticas vistas en clase: el recocido simulado. También hemos visto que existen diversos métodos para establecer el enfriamiento, dando todos ellos a distintos resultados, ya que la mayoría es una familia uniparamétrica. Esto hace que sea indispensable probar con distintas metaheurísticas (y sus distintos parámetros) y escoger la que mejor resultados obtenga para el problema en concreto.
 
 
 \end{document}

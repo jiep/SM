@@ -129,48 +129,50 @@ static List<Solución> generarVecindad(Solución s, InstanciaPHub instancia) {
     List<Solución> vecindad = new ArrayList<>();
     boolean[] sol = s.getSolucion();
     boolean[] sol2 = new boolean[sol.length];
-
     int nodos = sol.length;
-
-    // Generamos las permutaciones
+	
+	// Generamos las permutaciones
     for (int i = 0; i < sol.length; i++) {
         for (int j = 0; j < sol.length; j++) {
+            // Copiamos el array sol
+            sol2 = sol.clone();
+
             // Buscamos un true y un falso entre un servidor y un cliente
-            if (sol[i] == true && sol[j] == false) {
-                // Copiamos el array sol
-                System.arraycopy(sol, 0, sol2, 0, sol.length);
-
+            if ((sol[i] == true && sol[j] == false) || (sol[j] == true && sol[i] == false)) {	
                 // Intercambiamos las posiciones
-                sol2[i] = false;
-                sol2[j] = true;
-
+                if((sol[i] == true && sol[j] == false)){
+                    sol2[i] = false;
+                    sol2[j] = true;
+                }else if((sol[j] == true && sol[i] == false)){
+                    sol2[j] = false;
+                    sol2[i] = true;
+                }
+						
                 // Creamos la matriz de adyacencia de la nueva solución
                 boolean[][] ady = new boolean[nodos][nodos];
                 for (int z = 0; z < nodos; z++) {
-                    if (!sol2[z]) {
-                        // Seleccionamos el servidor más cercano que nos
-                        // encontremos
-                        int serv = Utils.seleccionarServidor(z, sol2, instancia.getDistancia());
-
-                        ady[z][serv] = true;
-                        ady[serv][z] = true;
-                     }
-
-                }
-
+                     if (!sol2[z]) {
+                         // Seleccionamos el servidor más cercano que nos encontramos
+                         int serv = Utils.seleccionarServidor(z, sol2, instancia.getDistancia());
+                     
+                         ady[z][serv] = true;
+                         ady[serv][z] = true;
+                     }	
+                }			
                 Solución s1 = new Solución(sol2, ady, instancia.getDistancia());
 
                 if (Utils.esSoluciónVálida(s1, instancia)) {
                     vecindad.add(s1);
                 }
-            }
+           }
         }
     }
     return vecindad;
 }
+
 \end{minted}
 
-En las líneas 9 a 12 se busca un servidor y un cliente y se intercambian sus posiciones. De la línea 21 a la 32, se genera la matriz de adyacencia de la misma forma que para generar una solución aleatoria. Se crea la solución y se comprueba si es válida. En caso afirmativo se añade a la lista de vecinos. Por último, se devuelve la lista de vecinos.
+En las líneas 8 a 22 se busca un servidor y un cliente y se intercambian sus posiciones. De la línea 25 a la 34, se genera la matriz de adyacencia de la misma forma que para generar una solución aleatoria. Se crea la solución y se comprueba si es válida. En caso afirmativo se añade a la lista de vecinos. Por último, se devuelve la lista de vecinos.
 
 \subsection{Programación de los dos algoritmos}
 
@@ -219,16 +221,16 @@ En la Tabla~\ref{tbl:comp} se muestran los resultados de la ejecución de los al
 		\multirow{3}{*}{Instancia} & \multicolumn{4}{c}{Best improvement}                                                      & \multicolumn{4}{c}{First improvement}                                                     \\ \cmidrule(l){2-9} 
 		& \multicolumn{2}{c}{Orden lexicográfico}     & \multicolumn{2}{c}{Orden aleatorio}         & \multicolumn{2}{c}{Orden lexicográfico}     & \multicolumn{2}{c}{Orden aleatorio}         \\ \cmidrule(l){2-9} 
 		& Función objetivo & Servidores               & Función objetivo & Servidores               & Función objetivo & Servidores               & Función objetivo & Servidores               \\ \midrule
-		1                          & 952.877          & {[}24, 28, 31, 37, 49{]} & 952.877          & {[}24, 28, 31, 37, 49{]} & 953.776          & {[}24, 28, 31, 37, 49{]} & 952.877          & {[}24, 28, 31, 37, 49{]} \\
-		2                          & 917.405          & {[}7, 23, 33, 40, 50{]}  & 917.405          & {[}7, 23, 33, 40, 50{]}  & 927.784          & {[}7, 23, 33, 40, 50{]}  & 919.901          & {[}7, 23, 33, 40, 50{]}  \\
-		3                          & 987.576          & {[}10, 18, 34, 40, 49{]} & 987.576          & {[}10, 18, 34, 40, 49{]} & 987.576          & {[}10, 18, 34, 40, 49{]} & 987.576          & {[}10, 18, 34, 40, 49{]} \\
-		4                          & 889.546          & {[}4, 11, 16, 42, 50{]}  & 889.546          & {[}4, 11, 16, 42, 50{]}  & 909.138          & {[}4, 11, 16, 42, 50{]}  & 911.626          & {[}4, 11, 16, 42, 50{]}  \\
-		5                          & 777.419          & {[}7, 11, 16, 22, 50{]}  & 777.419          & {[}7, 11, 16, 22, 50{]}  & 800.094          & {[}7, 11, 16, 22, 50{]}  & 790.070          & {[}7, 11, 16, 22, 50{]}  \\
-		6                          & 714.157          & {[}4, 14, 18, 27, 49{]}  & 714.157          & {[}4, 14, 18, 27, 49{]}  & 717.988          & {[}4, 14, 18, 27, 49{]}  & 717.988          & {[}4, 14, 18, 27, 49{]}  \\
-		7                          & 863.546          & {[}4, 11, 14, 38, 49{]}  & 863.546          & {[}4, 11, 14, 38, 49{]}  & 961.614          & {[}4, 11, 14, 38, 49{]}  & 863.546          & {[}4, 11, 14, 38, 49{]}  \\
-		8                          & 873.628          & {[}19, 22, 37, 38, 50{]} & 873.628          & {[}19, 22, 37, 38, 50{]} & 873.628          & {[}19, 22, 37, 38, 50{]} & 874.776          & {[}19, 22, 37, 38, 50{]} \\
-		9                          & 791.706          & {[}2, 4, 13, 24, 50{]}   & 791.706          & {[}2, 4, 13, 24, 50{]}   & 791.923          & {[}2, 4, 13, 24, 50{]}   & 797.231          & {[}2, 4, 13, 24, 50{]}   \\
-		10                         & 827.279          & {[}2, 20, 32, 33, 50{]}  & 827.279          & {[}2, 20, 32, 33, 50{]}  & 837.145          & {[}2, 20, 32, 33, 50{]}  & 805.421          & {[}2, 20, 32, 33, 50{]}  \\ \bottomrule
+		1                          & 708.4036         & {[}12, 17, 19, 21, 48{]} & 708.4036         & {[}12, 17, 19, 21, 48{]} & 787.8877         & {[}3, 12, 28, 36, 38{]}  & 708.4036         & {[}12, 17, 19, 21, 48{]} \\
+		2                          & 877.0881         & {[}2, 16, 22, 24, 25{]}  & 877.0881         & {[}2, 16, 22, 24, 25{]}  & 877.0881         & {[}2, 16, 22, 24, 25{]}  & 872.666          & {[}1, 2, 12, 16, 24{]}   \\
+		3                          & 758.2295         & {[}16, 22, 26, 33, 47{]} & 758.2295         & {[}16, 22, 26, 33, 47{]} & 758.2295         & {[}16, 22, 26, 33, 47{]} & 779.49           & {[}1, 16, 22, 35, 44{]}  \\
+		4                          & 789.5163         & {[}20, 26, 27, 28, 39{]} & 789.5163         & {[}20, 26, 27, 28, 39{]} & 768.0499         & {[}15, 20, 26, 41, 48{]} & 793.4294         & {[}3, 13, 15, 25, 48{]}  \\
+		5                          & 671.1279         & {[}3, 8, 9, 29, 50{]}    & 671.1279         & {[}3, 8, 9, 29, 50{]}    & 680.1686         & {[}3, 9, 26, 29, 43{]}   & 671.1279         & {[}3, 8, 9, 29, 50{]}    \\
+		6                          & 663.1406         & {[}13, 22, 29, 36, 40{]} & 663.1406         & {[}13, 22, 29, 36, 40{]} & 663.1406         & {[}13, 22, 29, 36, 40{]} & 663.1406         & {[}13, 22, 29, 36, 40{]} \\
+		7                          & 810.3957         & {[}19, 22, 25, 45, 46{]} & 810.3957         & {[}19, 22, 25, 45, 46{]} & 836.1206         & {[}24, 26, 30, 41, 45{]} & 833.734          & {[}7, 30, 41, 43, 45{]}  \\
+		8                          & 834.8878         & {[}4, 13, 15, 17, 47{]}  & 834.8878         & {[}4, 13, 15, 17, 47{]}  & 941.7328         & {[}4, 6, 20, 24, 40{]}   & 834.8878         & {[}4, 13, 15, 17, 47{]}  \\
+		9                          & 854.0817         & {[}2, 4, 24, 30, 37{]}   & 854.0817         & {[}2, 4, 24, 30, 37{]}   & 874.2569         & {[}4, 10, 23, 37, 44{]}  & 874.2569         & {[}4, 10, 23, 37, 44{]}  \\
+		10                         & 722.024          & {[}7, 22, 23, 31, 46{]}  & 722.024          & {[}7, 22, 23, 31, 46{]}  & 734.1348         & {[}7, 11, 22, 26, 30{]}  & 722.024          & {[}7, 22, 23, 31, 46{]}  \\ \bottomrule
 	\end{tabular}%
 }
 \end{table}
@@ -236,11 +238,11 @@ En la Tabla~\ref{tbl:comp} se muestran los resultados de la ejecución de los al
 Se puede observar que el valor de la función objetivo de la búsqueda best improvement siempre es el mismo, tanto si se hace con orden aleatorio como lexicográfico. Esto es debido a que se explora toda la vecindad y se elige la mejor solución, por lo que el orden no importa. Por el contrario, con la búsqueda first improvement, éste orden sí importa y, en este caso, se obtienen mejor resultados con
 la búsqueda aleatoria.\\
 
-En cuanto a la medida del valor \texttt{dev} hemos obtenido en la búsqueda best improvement un valor de $0.00232$, mientras que en la búsqueda first improvement con orden aleatorio hemos obtenido $0.00221$ y con orden lexicográfico $0.00230$.\\
+En cuanto a la medida del valor \texttt{dev} hemos obtenido en la búsqueda best improvement un valor de $0.00164$, mientras que en la búsqueda first improvement con orden aleatorio hemos obtenido $0.00158$ y con orden lexicográfico $0.00143$.\\
 
-Por tanto, el mejor valor de \texttt{dev} se ha obtenido con la búsqueda first improvement con orden aleatorio, aunque con muy poca diferencia.
+Por tanto, el mejor valor de \texttt{dev} se ha obtenido con la búsqueda first improvement con orden lexicográfico, aunque con muy poca diferencia.
 \section{Conclusiones}
 
-En este caso práctico hemos visto cómo implementar búsquedas locales (best y first improvement). Además, hemos visto que el orden de exploración de la vecindad puede suponer grandes diferencias de la función objetivo. En nuestro caso hemos visto que el orden aleatorio produce mejores resultados que el lexicográfico.  
+En esta práctica hemos visto cómo implementar búsquedas locales (best y first improvement). Además, hemos visto que el orden de exploración de la vecindad puede suponer grandes diferencias de la función objetivo. En nuestro caso hemos visto que el orden lexicográfico produce mejores resultados que el aleatorio en este problema.  
 
 \end{document}

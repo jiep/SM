@@ -6,27 +6,33 @@ import java.util.Random;
 
 public class Utils {
 	public static boolean esSoluciónVálida(Solución s, InstanciaPHub instancia) {
-		boolean esValida = false;
+		boolean esValida = true;
 
 		boolean[][] ady = s.getMatrizAdyacencia();
 		boolean[] sol = s.getSolucion();
 
 		int capacidad = instancia.getCapacidad();
 
+		int demanda[] = new int[instancia.getServidores()];
+
+		int cont = 0;
+
 		// Comprobamos si se cumple el criterio de la demanda
 		for (int i = 0; i < sol.length; i++) {
-			int demanda = 0;
-			for (int j = 0; j < sol.length; j++) {
-				if (sol[i] && ady[i][j]) {
-					demanda += instancia.getDemanda()[j];
+			if (sol[i]) {
+				for (int j = 0; j < sol.length; j++) {
+					if (ady[i][j]) {
+						demanda[cont] += instancia.getDemanda()[j];
+					}
 				}
-
+				cont++;
 			}
+		}
 
-			if (demanda <= capacidad && demanda != 0) {
-				esValida = true;
+		for (int i = 0; i < demanda.length; i++) {
+			if (demanda[i] > capacidad) {
+				esValida = false;
 			}
-
 		}
 
 		return esValida;

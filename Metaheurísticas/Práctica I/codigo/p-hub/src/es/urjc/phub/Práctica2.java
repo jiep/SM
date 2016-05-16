@@ -1,5 +1,7 @@
 package es.urjc.phub;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 import java.util.List;
 
@@ -95,6 +97,10 @@ public class Práctica2 {
 	}
 
 	public static void main(String[] args) {
+		
+		// Establecemos el punto como separador de los decimales
+		DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
+		simbolos.setDecimalSeparator('.');
 
 		// Cargamos las instancias de cada fichero
 		List<InstanciaPHub> instancias = PHub.leerInstanciasDesdeDirectorio("instancias");
@@ -110,8 +116,10 @@ public class Práctica2 {
 
 		String s = "";
 		
-		long tiempo = 10000; // 10 segundos 
+		long tiempo = 2000; // 10 segundos 
 
+        DecimalFormat df = new DecimalFormat("#.####", simbolos);
+		
 		for (InstanciaPHub instancia : instancias) {
 			Solución sol_aleatoria = instancia.generarSoluciónAleatoria();
 
@@ -123,7 +131,7 @@ public class Práctica2 {
 			System.out.println("Solución generada aleatoriamente:");
 			System.out.println("Solución tras búsqueda: " + Arrays.toString(sol_aleatoria.getSolucion()));
 			System.out.println("Matriz de adyacencia: " + Arrays.deepToString(sol_aleatoria.getMatrizAdyacencia()));
-			System.out.println("Función objetivo: " + sol_aleatoria.getObjetivo());
+			System.out.println("Función objetivo: " + df.format(sol_aleatoria.getObjetivo()));
 			System.out.println();
 
 			Solución sol_busq_aleatoria = constAleatoriaYMejoraAleatorio(sol_aleatoria, instancia, tiempo);
@@ -144,10 +152,10 @@ public class Práctica2 {
 			System.out.println("Solución tras búsqueda: " + Arrays.toString(sol_busq_lexicografico.getSolucion()));
 			System.out.println(
 					"Matriz de adyacencia: " + Arrays.deepToString(sol_busq_lexicografico.getMatrizAdyacencia()));
-			System.out.println("Función objetivo: " + sol_busq_lexicografico.getObjetivo());
+			System.out.println("Función objetivo: " + df.format(sol_busq_lexicografico.getObjetivo()));
 			System.out.println();
 
-			s += sol_busq_lexicografico.getObjetivo() + ";" + Arrays.toString(servidores) + ";";
+			s += df.format(sol_busq_lexicografico.getObjetivo()) + ";" + Arrays.toString(servidores) + ";";
 
 			System.out.println("Búsqueda aleatoria:");
 			servidores = new int[instancia.getServidores()];
@@ -164,10 +172,10 @@ public class Práctica2 {
 			System.out.println("Solución tras búsqueda: " + Arrays.toString(sol_busq_aleatoria.getSolucion()));
 			System.out
 					.println("Matriz de adyacencia: " + Arrays.deepToString(sol_busq_aleatoria.getMatrizAdyacencia()));
-			System.out.println("Función objetivo: " + sol_busq_aleatoria.getObjetivo());
+			System.out.println("Función objetivo: " + df.format(sol_busq_aleatoria.getObjetivo()));
 			System.out.println();
 
-			s += sol_busq_aleatoria.getObjetivo() + ";" + Arrays.toString(servidores) + ";";
+			s += df.format(sol_busq_aleatoria.getObjetivo()) + ";" + Arrays.toString(servidores) + ";";
 
 			System.out.println("----Búsqueda first improvement:");
 
@@ -185,14 +193,14 @@ public class Práctica2 {
 				}
 			}
 
-			s += sol_busq_lexicografico_first.getObjetivo() + ";" + Arrays.toString(servidores) + ";";
+			s += df.format(sol_busq_lexicografico_first.getObjetivo()) + ";" + Arrays.toString(servidores) + ";";
 
 			System.out.println("Servidores: " + Arrays.toString(servidores));
 			System.out
 					.println("Solución tras búsqueda: " + Arrays.toString(sol_busq_lexicografico_first.getSolucion()));
 			System.out.println(
 					"Matriz de adyacencia: " + Arrays.deepToString(sol_busq_lexicografico_first.getMatrizAdyacencia()));
-			System.out.println("Función objetivo: " + sol_busq_lexicografico_first.getObjetivo());
+			System.out.println("Función objetivo: " + df.format(sol_busq_lexicografico_first.getObjetivo()));
 			System.out.println();
 
 			System.out.println("Búsqueda aleatoria:");
@@ -210,11 +218,11 @@ public class Práctica2 {
 			System.out.println("Solución tras búsqueda: " + Arrays.toString(sol_busq_aleatoria_first.getSolucion()));
 			System.out.println(
 					"Matriz de adyacencia: " + Arrays.deepToString(sol_busq_aleatoria_first.getMatrizAdyacencia()));
-			System.out.println("Función objetivo: " + sol_busq_aleatoria_first.getObjetivo());
+			System.out.println("Función objetivo: " + df.format(sol_busq_aleatoria_first.getObjetivo()));
 
 			System.out.println("==========================================");
 
-			s += sol_busq_aleatoria_first.getObjetivo() + ";" + Arrays.toString(servidores) + ";";
+			s += df.format(sol_busq_aleatoria_first.getObjetivo()) + ";" + Arrays.toString(servidores) + ";";
 
 			inst++;
 
