@@ -1,12 +1,12 @@
 ##############################################################
-# Cuesti髇 1
+# Cuesti贸n 1
 ##############################################################
 
 
-# Generamos una simulaci髇 del coste
+# Generamos una simulaci贸n del coste
 generateCost =  function(){
   
-  # Asiganamos los par醡etros
+  # Asiganamos los par谩metros
   mu = 9
   sigma = 1
   lambda_3 = 1/8
@@ -30,7 +30,7 @@ generateCost =  function(){
 }
 
 ##############################################################
-# Cuesti髇 2
+# Cuesti贸n 2
 ##############################################################
 
 estimateSampleVariance =  function(alpha = 0.05, d = 10){
@@ -46,22 +46,18 @@ estimateSampleVariance =  function(alpha = 0.05, d = 10){
   
   S = array()
   S[i] = var(X)
-  cat("S_i", S[i])
   
   while (2*qnorm(1-alpha/2)*S/sqrt(n[i]) > d){
     i = i + 1
     
     min_i = which(n >= (2*qnorm(1-alpha/2)*S[i-1]/d)^2)
-    print(n)
     if(is.integer(min_i) && length(min_i) == 0){
       min_i = (2*qnorm(1-alpha/2)*S[i-1]/d)^2
       n[i] = min_i
     }else{
       n[i] = n[min_i]
     }
-    
-    cat("n_i", n[i])
-    
+        
     for(j in (n[i-1] +1):n[i]){
       X[j] = generateCost()
     }
@@ -69,5 +65,11 @@ estimateSampleVariance =  function(alpha = 0.05, d = 10){
     S[i] = var(X)
   }
   
-  return(n[i])
+  return(X)
 }
+
+##############################################################
+# Cuesti贸n 3
+##############################################################
+
+hist(X, col="blue", main = "Histograma de X")
