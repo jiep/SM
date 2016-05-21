@@ -1,8 +1,8 @@
 ##############################################################
-# Cuesti髇 1
+# Cuesti贸n 1
 ##############################################################
 
-# Matriz de transici髇 de la cadena de Markov
+# Matriz de transici?n de la cadena de Markov
 P = matrix(c(0.1, 0.4, 0.5, 0.1, 0.7, 0.2, 0.3, 0.1, 0.6),
            nrow = 3, 
            ncol = 3,
@@ -12,20 +12,20 @@ P = matrix(c(0.1, 0.4, 0.5, 0.1, 0.7, 0.2, 0.3, 0.1, 0.6),
 # Nombre de los estados
 states = c("estado0", "estado1", "estado2")
 
-# Asignamos los estados a la matriz de transici髇
+# Asignamos los estados a la matriz de transici贸n
 dimnames(P) <- list(states, states)
 
 
-# Definimos una funci髇 para muestrear una cadena de Markov
+# Definimos una funci贸n para muestrear una cadena de Markov
 samplingCMTD = function(P, N, i0){
   X = array()
   X[1] = i0
   i = 2
   while(i < N){
     h = rgeom(1, 1-P[i0,i0])
-    cat("h:", h, "\n i:",i, "\n", "i+h:", i+h, "\n")
+    #cat("h:", h, "\n i:",i, "\n", "i+h:", i+h, "\n")
     X[i+h] = generateDist(P, i0, colnames(P))
-    cat("estado: ", X[i+h], "\n", "---------------\n")
+    #cat("estado: ", X[i+h], "\n", "---------------\n")
     i0 = X[i+h]
     i = i + 1
   }
@@ -33,13 +33,13 @@ samplingCMTD = function(P, N, i0){
   return(X)
 }
 
-# Definimos una funci髇 para generar la distribuci髇 discreta 
+# Definimos una funci贸n para generar la distribuci贸n discreta 
 generateDist = function(P, state, states){
   
   # Eliminamos el estado en el que nos encontramos
   states = setdiff(states, state)
   
-  # Vector de probabilidades vac韔
+  # Vector de probabilidades vac?o
   probs = array(dim = length(states))
   
   # Recorremos el vector de estados 
@@ -53,14 +53,14 @@ generateDist = function(P, state, states){
   u = runif(1)
 
   # Calculamos el vector acumulado 
-  # y a馻dimos 0 al comienzo
+  # y a帽adimos 0 al comienzo
   cumulative = unname(c(0,cumsum(probs)))
   
-  # Calculamos la longitud real del vector (le hemos a馻dido una posici髇 nueva)
+  # Calculamos la longitud real del vector (le hemos a帽adido una posici贸n nueva)
   n = length(cumulative) - 1
   
-  # Buscamos la posici髇 que acumula la cantidad de probabilidad
-  # generada por el n鷐ero aleatorio y lo asignamos al estado.
+  # Buscamos la posici贸n que acumula la cantidad de probabilidad
+  # generada por el n煤mero aleatorio y lo asignamos al estado.
   for(i in 1:n){
     if((cumulative[i] <= u) & (u <= cumulative[i+1])){
       stat = states[i]
@@ -73,13 +73,13 @@ generateDist = function(P, state, states){
 }
 
 ##############################################################
-# Cuesti髇 2
+# Cuesti贸n 2
 ##############################################################
 
-# N鷐ero de muestras de cada r閜lica
+# N煤mero de muestras de cada r茅plica
 N = 1000
 
-# N鷐ero de r閜licas
+# N煤mero de r茅plicas
 n = 100
 
 X = list()
@@ -99,7 +99,7 @@ for(i in 1:n){
   state3[i] = X[[i]][[3]]
 }
 
-# Media y desviaci髇 t韕ica de cada estado
+# Media y desviaci贸n t铆pica de cada estado
 mean(state1)
 sd(state1)
 
