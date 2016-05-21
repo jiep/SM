@@ -82,10 +82,10 @@ int temp_ini, int nrep, double alpha, long tiempo) {
     int i = 1;
 
     switch (tipo) {
-        case BOLTZMANN: tk = Enfriamiento.crierioBoltzmann(temp_ini, alpha, i); break;
-        case CAUCHY: tk = Enfriamiento.esquemaCauchy(temp_ini, alpha, i); break;
-        case LUNDYyMEES: tk = Enfriamiento.esquemaCauchy(temp_ini, alpha, i); break;
-        case DESCENSO_GEOMETRICO: tk = Enfriamiento.crierioBoltzmann(temp_ini, alpha, i);
+    	case BOLTZMANN: tk = Enfriamiento.crierioBoltzmann(temp_ini, alpha, i); break;
+    	case CAUCHY: tk = Enfriamiento.esquemaCauchy(temp_ini, alpha, i); break;
+    	case LUNDIyMEES: tk = Enfriamiento.lundiYMees(temp_ini, alpha, i); break;
+    	case DESCENSO_GEOMETRICO: tk = Enfriamiento.descensoGeométrico(temp_ini, alpha, i);
     }
 
     long fin = System.currentTimeMillis() + tiempo;
@@ -117,9 +117,9 @@ int temp_ini, int nrep, double alpha, long tiempo) {
         
         switch (tipo) {
             case BOLTZMANN: tk = Enfriamiento.crierioBoltzmann(temp_ini, alpha, i); break;
-            case CAUCHY: tk = Enfriamiento.esquemaCauchy(temp_ini, alpha, i); break;
-            case LUNDYyMEES: tk = Enfriamiento.esquemaCauchy(temp_ini, alpha, i); break;
-            case DESCENSO_GEOMETRICO: tk = Enfriamiento.crierioBoltzmann(temp_ini, alpha, i);
+         	case CAUCHY: tk = Enfriamiento.esquemaCauchy(temp_ini, alpha, i); break;
+    	    case LUNDIyMEES: tk = Enfriamiento.lundiYMees(temp_ini, alpha, i); break;
+    	    case DESCENSO_GEOMETRICO: tk = Enfriamiento.descensoGeométrico(temp_ini, alpha, i);
         }
         i++;
     } while (System.currentTimeMillis() <= fin);

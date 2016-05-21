@@ -54,10 +54,6 @@
 \thispagestyle{empty}
 \newpage
 
-\listoffigures
-\thispagestyle{empty}
-\newpage
-
 \tableofcontents
 \thispagestyle{empty}
 \newpage
@@ -76,7 +72,7 @@ A continuación, resolveremos todos las cuestiones planteadas de la práctica.
 
 \subsection{Definir una búsqueda local}
 
-El código para realizar una búsqueda local a partir de su vecindad y el tipo de orden (lexicográfico o aleatorio) se puede ver a continuación (función \texttt{busquedaLocal} de la clase \texttt{Utils}):
+El código para realizar una búsqueda local (de tipo best improvement) a partir de su vecindad y el tipo de orden (lexicográfico o aleatorio) se puede ver a continuación (función \texttt{busquedaLocal} de la clase \texttt{Utils}):
 
 \begin{minted}[linenos=true, numberblanklines=true, breaklines=true]{java}
 public static Solución busquedaLocal(String tipo_orden, List<Solución> vecindades, Solución actual) {
@@ -209,7 +205,7 @@ El código del algoritmo A3 se idéntico al anterior salvo en la línea 11, dond
 
 \subsection{Análisis de los resultados}
 
-En la Tabla~\ref{tbl:comp} se muestran los resultados de la ejecución de los algoritmos, tanto por tipo de búsqueda (best o first improvement) y por tipo de orden (aleatorio y lexicográfico). El detalle completo de las soluciones puede verse en el fichero \texttt{busqueda\_local.txt} que se encuentra en el mismo directorio que esta memoria.\\
+Puesto que con el tipo de búsqueda best-improvment, los resultados son idénticos ya sea por orden lexicográfico como aleatorio. Es por ello, por lo que implementaremos también la búsqueda first-improvement (con orden lexicográfico y aleatorio) y compararemos los resultados. En la Tabla~\ref{tbl:comp} se muestran los resultados de la ejecución de los algoritmos, tanto por tipo de búsqueda (best o first improvement) y por tipo de orden (aleatorio y lexicográfico). El detalle completo de las soluciones puede verse en el fichero \texttt{busqueda\_local.txt} que se encuentra en el mismo directorio que esta memoria.\\
 
 \begin{table}[htbp!]
 	\centering
@@ -235,8 +231,7 @@ En la Tabla~\ref{tbl:comp} se muestran los resultados de la ejecución de los al
 }
 \end{table}
 
-Se puede observar que el valor de la función objetivo de la búsqueda best improvement siempre es el mismo, tanto si se hace con orden aleatorio como lexicográfico. Esto es debido a que se explora toda la vecindad y se elige la mejor solución, por lo que el orden no importa. Por el contrario, con la búsqueda first improvement, éste orden sí importa y, en este caso, se obtienen mejor resultados con
-la búsqueda aleatoria.\\
+Se puede observar que el valor de la función objetivo de la búsqueda best improvement siempre es el mismo, tanto si se hace con orden aleatorio como lexicográfico. Esto es debido a que se explora toda la vecindad y se elige la mejor solución, por lo que el orden no importa. Por el contrario, con la búsqueda first improvement, éste orden sí importa y, en este caso, se obtienen mejor resultados con la búsqueda aleatoria.\\
 
 En cuanto a la medida del valor \texttt{dev} hemos obtenido en la búsqueda best improvement un valor de $0.00164$, mientras que en la búsqueda first improvement con orden aleatorio hemos obtenido $0.00158$ y con orden lexicográfico $0.00143$.\\
 

@@ -61,7 +61,7 @@
 
 \section{Introducción}
 
-El problema del capacited p-hub consiste en determinar los $p$ centros (hubs) que actúan como servidores y conectar todos los clientes a uno de los servidores de forma que se minimice el la suma de las distancias de los clientes a los servidores. Además, cada servidor sólo puede puede servir una determinada cantidad de recursos, y cada cliente tiene una demanda que deben ser satisfechas. De forma matemática, el modelo se formula así:
+El problema del capacited p-hub consiste en determinar los $p$ centros (hubs) que actúan como servidores y conectar todos los clientes a uno de los servidores de forma que se minimice la suma de las distancias de los clientes a los servidores. Además, cada servidor sólo puede puede servir una determinada cantidad de recursos, y cada cliente tiene una demanda que deben ser satisfechas. De forma matemática, el modelo se formula así:
 
 \begin{alignat*}{2}
 \text{Minimizar }   & \sum_{i} \sum_{j} d_{ij}x_{ij}  \\
@@ -115,7 +115,7 @@ Cada solución se guarda en un objeto de la clase \texttt{Solución}, que contie
 \begin{enumerate}
 	\item solución: vector de booleanos que indica \texttt{true}, si el nodo $i$ es un servidor, \texttt{false} en caso contrario.
 	\item matrizAdyacencia: matriz de booleanos, que contiene la matriz de adyacencia del grafo, esto es, \texttt{true}, si hay una arista entre el nodo $i$ y $j$, \texttt{false} en caso contrario.
-	\item objetivo: valor de la función objetivo, es decir, la suma de las aristas existentes entre los clientes y los objetivos. 
+	\item objetivo: valor de la función objetivo, es decir, la suma de las distancias de las aristas existentes entre los clientes y los objetivos. 
 \end{enumerate}
 
 \subsection{Cálculo de la función objetivo}

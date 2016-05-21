@@ -116,7 +116,7 @@ public class Práctica2 {
 
 		String s = "";
 		
-		long tiempo = 2000; // 10 segundos 
+		long tiempo = 2000; // 2 segundos 
 
         DecimalFormat df = new DecimalFormat("#.####", simbolos);
 		
