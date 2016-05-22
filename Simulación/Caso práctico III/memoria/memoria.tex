@@ -35,8 +35,8 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows,automata}
 
-%\setsansfont[Ligatures=TeX]{texgyreadventor}
-%\setmainfont[Ligatures=TeX]{texgyrepagella}
+\setsansfont[Ligatures=TeX]{texgyreadventor}
+\setmainfont[Ligatures=TeX]{texgyrepagella}
 
 \input{portada}
 
@@ -113,8 +113,7 @@ Así pues, la matriz de transición de la cadena de Markov con espacio de estado
 La Figura~\ref{fig:grafo} muestra la matriz de transición en forma de grafo.\\
 
 \begin{figure}[tbph!]
-\label{fig:grafo}
-\begin{center}
+	\centering
 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=6cm,
 	semithick]
 	
@@ -131,10 +130,10 @@ La Figura~\ref{fig:grafo} muestra la matriz de transición en forma de grafo.\\
 	\path (A) edge[loop below]  node {0.1} (A);
 	\path (C) edge[loop below]  node {0.6} (C);
 	\path (B) edge[loop above]  node {0.7} (B);
-	
 	\end{tikzpicture}
-\end{center}
+
 \caption{Cadena de Markov en forma de grafo}
+\label{fig:grafo}
 \end{figure}
 
 
@@ -143,7 +142,7 @@ La Figura~\ref{fig:grafo} muestra la matriz de transición en forma de grafo.\\
 
 Usamos el algoritmo visto en clase para generar transiciones de la cadena de Markov. El código implementado se puede ver en el Anexo~\ref{app:codigo}.\\
 
-Haciendo $100$ réplicas con $100$ muestras de la cadena de Markov cada una, se obtienen los resultados de la Tabla~\ref{tbl:comp}.\\
+Haciendo $100$ réplicas con $1000$ muestras de la cadena de Markov cada una, se obtienen los resultados de la Tabla~\ref{tbl:comp}.\\
 
 \begin{table}[htbp!]
 	\centering
@@ -160,6 +159,43 @@ Haciendo $100$ réplicas con $100$ muestras de la cadena de Markov cada una, se 
 
 Es decir, el computador estará en el 29.33\% del tiempo en el estado0, el 30.68\% en el estado1 y el 39.98\% en el estado2.\\
 
+Podemos conocer la solución analítica, aplicando potencias a la matriz de transición de la cadena de Markov, es decir, $P^2$, $P^3$, ..., $P^{100}$, ... ya que cuando $\mathrm{lim}_{k \to \infty} P^k$ cada fila de $P$ tiene al vector estacionario de la cadena de Markov. Así pues, estos son algunos valores de las potencias:
+
+\[ P^2 = \left(\begin{array}{ccc}
+0.20 & 0.37 & 0.43 \\
+0.14 & 0.55 & 0.31 \\
+0.22 & 0.25 & 0.53
+\end{array}\right) \]
+
+\[ P^7 = \left(\begin{array}{ccc}
+0.1853320 & 0.3883624 & 0.4263056 \\
+0.1835368 & 0.3947920 & 0.4216712 \\
+0.1866264 & 0.3837280 & 0.4296456
+\end{array}\right) \]
+
+\[ P^{22} = \left(\begin{array}{ccc}
+0.1851851924 & 0.3888888629 & 0.4259259446 \\
+0.1851851040 & 0.3888891798 & 0.4259257163 \\
+0.1851852562 & 0.3888886346 & 0.4259261092 \\
+\end{array}\right) \]
+
+\[ P^{52} = P^{57} = \dots = P^{102} = \left(\begin{array}{ccc}
+0.1851851852 & 0.3888888889 & 0.4259259259 \\
+0.1851851852 & 0.3888888889 & 0.4259259259 \\
+0.1851851852 & 0.3888888889 & 0.4259259259 \\
+\end{array}\right) \]
+
+Así pues el vector estacionario es $(0.185, 0.3888, 0.4259)$. El método implementado sobrestima el tiempo en el estado0 y lo subestima en el estado1. El estado2 es bastante preciso.\\
+
+Calculamos intervalos de confianza para al 95\% para cada uno de los estados. Así pues,
+
+\begin{itemize}
+	\item Estado 0: $[0.2714, 0.3151]$
+	\item Estado 1: $[0.2805, 0.3330]$
+	\item Estado 2: $[0.3751, 0.4244]$
+\end{itemize}
+
+Con nivel de confianza del 95\%, podemos asegurar que los valores de cada uno de estos tres estados estarán dentro de cada intervalo de confianza.
 
 
 \section{Conclusiones}

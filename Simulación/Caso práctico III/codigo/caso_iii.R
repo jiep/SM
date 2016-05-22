@@ -108,3 +108,14 @@ sd(state2)
 
 mean(state3)
 sd(state3)
+
+# Cargamos el paquete expm y si no esta lo instalamos
+if(!require("expm")){install.packages("expm")}
+require("expm")
+
+for(i in seq(2,102, 5)){
+  cat("P^", i, "\n")
+  print(P%^%i)
+}
+
+

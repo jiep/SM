@@ -31,8 +31,8 @@
 \usepackage{pdflscape}
 \usepackage{minted}
 
-%\setsansfont[Ligatures=TeX]{texgyreadventor}
-%\setmainfont[Ligatures=TeX]{texgyrepagella}
+\setsansfont[Ligatures=TeX]{texgyreadventor}
+\setmainfont[Ligatures=TeX]{texgyrepagella}
 
 \input{portada}
 
@@ -71,9 +71,12 @@ El coste $C$ de un sistema se modeliza como
 
 \[ C = C_1 \cdot C_2 + C_3 \cdot C_4 \]
 
-donde
+donde \\
 
-$C_1 \sim \mathcal{N}(9, 1)$; $C_2 | C_1 \sim \mathcal{P}ois(5\cdot C_1)$; $C_3 \sim \mathcal{E}xp(1/8)$; $C_4 \sim \mathcal{E}xp(1/16)$.
+\[C_1 \sim \mathcal{N}(9, 1)\] 
+\[C_2 | C_1 \sim \mathcal{P}ois(5\cdot C_1)\] 
+\[C_3 \sim \mathcal{E}xp(1/8)\]
+\[C_4 \sim \mathcal{E}xp(1/16)\]
 
 \section{Resolución del caso práctico}
 
@@ -82,17 +85,17 @@ A continuación resolveremos cada una de las cuestiones planteadas.\\
 Calculamos el intervalo de confianza del 95\% y amplitud 10 utilizando el algoritmo visto en clase. La Tabla~\ref{tbl:resultado} muestra cada una de las iteraciones el algoritmo, y los valores de la amplitud, el número de muestras y el coste medio.
 
 \begin{table}[htbp!]
-\centering
-\caption{Resultado del algoritmo}
-\label{tbl:resultado}
-\begin{tabular}{@{}cccccc@{}}
-\toprule
-Lote & n                & Media  & S        & Amplitud máxima & Amplitud \\ \midrule
-0    & 30               & 500.20 & 14916.8  & 10              & 10.67    \\
-1    & $34\cdot 10^6$   & 538.14 & 60954.56 & 10              & 40.972   \\
-2    & $570\cdot 10^6$  & 541.45 & 65186.06 & 10              & 10.008   \\
-3    & $6.52\cdot 10^8$ & 538.91 & 61049.33 & 10              & 9.372    \\ \bottomrule
-\end{tabular}
+	\centering
+	\caption{Resultado del algoritmo}
+	\label{tbl:resultado}
+	\begin{tabular}{@{}cccccc@{}}
+		\toprule
+		Lote & n                & Media  & S        & Amplitud máxima & Amplitud \\ \midrule
+		0    & 30               & 500.20 & 14916.8  & 10              & 10.67    \\
+		1    & $34\cdot 10^6$   & 538.14 & 60954.56 & 10              & 40.972   \\
+		2    & $570\cdot 10^6$  & 541.45 & 65186.06 & 10              & 10.008   \\
+		3    & $6.52\cdot 10^8$ & 538.91 & 61049.33 & 10              & 9.372    \\ \bottomrule
+	\end{tabular}
 \end{table}
 
 Vemos que el algoritmo converge tras cuatro iteraciones llegando a una amplitud de 9.372. Por tanto, el intervalo de confianza al 95\% es $[538.91 - 4.686, 538.91 + 4.686] = [534.224, 543.596]$.\\
@@ -100,17 +103,17 @@ Vemos que el algoritmo converge tras cuatro iteraciones llegando a una amplitud 
 El histograma de la muestra resultante se puede ver en la Figura~\ref{fig:histograma}.\\
 
 \begin{figure}[tbph!]
-\centering
-\includegraphics[width=0.8\linewidth]{"imagenes/histograma"}
-\caption{Histograma de la muestra resultante}
-\label{fig:histograma}
+	\centering
+	\includegraphics[width=0.8\linewidth]{imagenes/histograma}
+	\caption{Histograma de la muestra resultante}
+	\label{fig:histograma}
 \end{figure}
- 
-Se puede observar que la distribución es muy asimétrica, con media 538.91, una asimtería de 3.770015. El valor mínimo es 78.89 y el máximo 9706.00. El primer cuartil 394.40 y el tercero es 610.10, por lo que el rango intercuartílico es de 215.70. Además, el valor mediano es 487.30.  
+
+Se puede observar que la distribución es muy asimétrica, con media 538.91 y una asimetría de 3.770. El valor mínimo es 78.89 y el máximo 9706.00. El primer cuartil es 394.40 y el tercero es 610.10, por lo que el rango intercuartílico es de 215.70. Además, el valor mediano se sitúa en 487.30.  
 
 \section{Conclusiones}
 
-En este caso práctico, hemos visto cómo aplicar un algoritmo para estimar el tamaño muestral en función de la varianza de una muestra. Esto puede ser muy útil cuando necesitamos estimar el número de muestras que nos serán necesarias para hacer una simulación.
+En este caso práctico, hemos visto cómo aplicar un algoritmo para estimar el tamaño muestral en función de la varianza de una muestra y la amplitud del intervalo que deseamos obtener. Esto puede ser muy útil cuando necesitamos estimar el número de muestras que nos serán necesarias para hacer una simulación y tener una precisión determinada.
 
 \newpage
 

@@ -72,4 +72,7 @@ estimateSampleVariance =  function(alpha = 0.05, d = 10){
 # Cuestión 3
 ##############################################################
 
+# Aplicamos la funcion implementada anteriormente
+estimateSampleVariance()
+
 hist(X, col="blue", main = "Histograma de X")
